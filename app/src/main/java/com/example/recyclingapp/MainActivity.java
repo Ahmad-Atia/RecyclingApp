@@ -8,6 +8,7 @@ import com.example.recyclingapp.network.MistralClient;
 import com.example.recyclingapp.network.MistralMessage;
 import com.example.recyclingapp.network.MistralRequest;
 import com.example.recyclingapp.network.MistralResponse;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Collections;
 
@@ -20,7 +21,7 @@ import java.util.Collections;
 public class MainActivity extends AppCompatActivity {
 
     private TextView helloTextView;
-
+    private FirebaseAnalytics mFirebaseAnalytics;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +32,16 @@ public class MainActivity extends AppCompatActivity {
 
         // Einfacher Beispiel-Aufruf: "Sage Hallo!"
         askMistral("Sag kurz Hallo auf Deutsch!");
+
+
+        // 3. Firebase initialisieren
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        // 4. Test-Event senden
+        Bundle bundle = new Bundle();
+        bundle.putString("message", "App gestartet!");
+        mFirebaseAnalytics.logEvent("test_connection", bundle);
+
     }
 
     /**
@@ -61,4 +72,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+
+
 }

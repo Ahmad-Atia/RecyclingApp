@@ -4,6 +4,7 @@ import java.io.FileInputStream
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -88,4 +89,7 @@ dependencies {
     implementation("androidx.browser:browser:1.8.0")
     implementation("androidx.camera:camera-camera2-pipe:1.0.0-beta03")
 
+
+    implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
+    implementation("com.google.firebase:firebase-analytics")
 }

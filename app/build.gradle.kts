@@ -83,16 +83,22 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     // Networking (Your Backend Integration)
     // Networking
-    implementation("com.squareup.retrofit2:retrofit:2.9.0") // <-- Diese Zeile fehlte
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0") // Empfohlen: Version 4.11.0
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
     implementation("androidx.browser:browser:1.8.0")
     implementation("androidx.camera:camera-camera2-pipe:1.0.0-beta03")
-    implementation("androidx.camera:camera-view:1.3.0")
 
 
     implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-firestore")
+
+    val cameraVersion = "1.3.4"
+    implementation("androidx.camera:camera-core:$cameraVersion")
+    implementation("androidx.camera:camera-camera2:$cameraVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraVersion")
+    implementation("androidx.camera:camera-view:$cameraVersion")
 }

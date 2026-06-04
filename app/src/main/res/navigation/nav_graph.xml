@@ -12,8 +12,7 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginView_to_dashboardView"
-            app:destination="@id/dashboardView" />
-    </fragment>
+            app:destination="@id/dashboardView" /> </fragment>
 
     <fragment
         android:id="@+id/dashboardView"
@@ -22,11 +21,11 @@
         tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_dashboardView_to_cameraView"
-            app:destination="@id/cameraView" />
+            app:destination="@id/nav_scan" />
     </fragment>
 
     <fragment
-        android:id="@+id/cameraView"
+        android:id="@+id/nav_scan"
         android:name="com.example.recyclingapp.ui.CameraView"
         android:label="Camera"
         tools:layout="@layout/fragment_camera">
@@ -40,5 +39,25 @@
         android:name="com.example.recyclingapp.ui.ResultView"
         android:label="Scan Result"
         tools:layout="@layout/fragment_result" />
+
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.example.recyclingapp.ui.CalendarView" android:label="Calendar"
+        tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.recyclingapp.ui.ProfileView" android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/registerView"
+        android:name="com.example.recyclingapp.ui.RegisterView"
+        android:label="Register"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_registerView_to_dashboardView"
+            app:destination="@id/dashboardView" />
+    </fragment>
 
 </navigation>

@@ -6,6 +6,7 @@ import java.util.Map;
 public class User {
     private String uid;
     private String email;
+    private String name;
     private String address;
     private int ecoScore;
 
@@ -13,9 +14,10 @@ public class User {
         // Required for Firestore
     }
 
-    public User(String uid, String email, String address, int ecoScore) {
+    public User(String uid, String email, String name, String address, int ecoScore) {
         this.uid = uid;
         this.email = email;
+        this.name = name;
         this.address = address;
         this.ecoScore = ecoScore;
     }
@@ -26,6 +28,9 @@ public class User {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
+    public String getName() { return name; }
+
+    public void setName(String name) { this.name = name; }
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
@@ -36,6 +41,7 @@ public class User {
         Map<String, Object> result = new HashMap<>();
         result.put("uid", uid);
         result.put("email", email);
+        result.put("name", name);
         result.put("address", address);
         result.put("ecoScore", ecoScore);
         return result;
@@ -46,6 +52,7 @@ public class User {
         User user = new User();
         user.setUid((String) data.get("uid"));
         user.setEmail((String) data.get("email"));
+        user.setName((String) data.get("name"));
         user.setAddress((String) data.get("address"));
         Long score = (Long) data.get("ecoScore");
         user.setEcoScore(score != null ? score.intValue() : 0);

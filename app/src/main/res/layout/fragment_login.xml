@@ -1,36 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center">
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="#F1F8E9">
 
-    <EditText
-        android:id="@+id/emailEditText"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress" />
+        android:layout_marginBottom="16dp"
+        app:boxBackgroundMode="none"
+        app:hintEnabled="false">
 
-    <EditText
-        android:id="@+id/passwordEditText"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="E-Mail Adresse"
+            android:inputType="textEmailAddress"
+            android:paddingStart="16dp"
+            android:background="@drawable/edittext_background" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/passwordInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword" />
+        android:layout_marginBottom="4dp"
+        app:boxBackgroundMode="none"
+        app:hintEnabled="false"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Passwort"
+            android:inputType="textPassword"
+            android:paddingStart="16dp"
+            android:background="@drawable/edittext_background" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/loginErrorText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="E-Mail oder Passwort falsch"
+        android:textColor="#B22222"
+        android:textSize="12sp"
+        android:paddingStart="16dp"
+        android:layout_marginBottom="24dp"
+        android:visibility="gone" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/login_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login" />
+        android:layout_height="50dp"
+        android:text="Anmelden"
+        android:backgroundTint="#1B5E20"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="12dp"/>
 
     <Button
-        android:id="@+id/registerButton"
+        android:id="@+id/register_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register"
-        style="@style/Widget.MaterialComponents.Button.TextButton" />
+        android:text="Jetzt registrieren"
+        android:textColor="#1B5E20"
+        style="?android:attr/borderlessButtonStyle"/>
 
 </LinearLayout>

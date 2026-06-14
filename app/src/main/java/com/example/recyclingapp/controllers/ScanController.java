@@ -15,10 +15,14 @@ public class ScanController {
     }
 
     public void uploadAndAnalyzeImage(File imageFile) {
-        // Upload logic to Firebase Storage (not in diagram but implied)
-        // Then save ScanResult to Firestore
+        // Mock analysis for now
         ScanResult result = new ScanResult();
-        // ... set fields ...
+        result.setId(java.util.UUID.randomUUID().toString());
+        result.setTimestamp(new java.util.Date());
+        result.setImageUrl("mock_url");
+        result.setDetectedItems(java.util.Arrays.asList("Plastikflasche", "Gelbe Tonne"));
+        result.setDepositFound(true);
+
         db.collection("scans").add(result.toMap());
     }
 

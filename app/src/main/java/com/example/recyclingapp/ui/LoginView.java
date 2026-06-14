@@ -50,23 +50,14 @@ public class LoginView extends Fragment {
             @Override
             public void onFailure(String message) {
                 if (isAdded()) {
-                    binding.loginErrorText.setVisibility(View.VISIBLE);
+                    android.widget.Toast.makeText(getContext(), message, android.widget.Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
     private void setupTextWatchers() {
-        TextWatcher clearErrorWatcher = new TextWatcher() {
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                binding.loginErrorText.setVisibility(View.GONE);
-            }
-            public void afterTextChanged(Editable s) {}
-        };
-
-        binding.emailEditText.addTextChangedListener(clearErrorWatcher);
-        binding.passwordEditText.addTextChangedListener(clearErrorWatcher);
+        // Removed as loginErrorText is gone
     }
 
     @Override

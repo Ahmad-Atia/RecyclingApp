@@ -12,6 +12,8 @@ import com.example.recyclingapp.R;
 import com.example.recyclingapp.databinding.FragmentDashboardBinding;
 import com.example.recyclingapp.controllers.ProfileController;
 import com.example.recyclingapp.models.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class DashboardView extends Fragment {
     private FragmentDashboardBinding binding;
@@ -28,7 +30,23 @@ public class DashboardView extends Fragment {
             Navigation.findNavController(v).navigate(R.id.action_dashboardView_to_cameraView);
         });
 
+        loadUserData();
+
         return binding.getRoot();
+    }
+
+    private void loadUserData() {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            FirebaseFirestore.getInstance().collection("users").document(uid)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            User user = User.fromMap(documentSnapshot.getData());
+                            render(user);
+                        }
+                    });
+        }
     }
 
     public void render(User user) {

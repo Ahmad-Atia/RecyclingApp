@@ -1,10 +1,35 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.RecyclingApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">#0B6623</item>
-        <item name="colorError">@android:color/transparent</item> <item name="textInputStyle">@style/MyCustomTextInputLayout</item>
+    <!-- Base application theme. -->
+    <style name="Theme.HelloWorld" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary</item>
+        <item name="colorOnSecondary">@color/neutral</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/primary</item>
+        <!-- Background/Surface color. -->
+        <item name="android:windowBackground">@color/surface</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/neutral</item>
     </style>
 
-    <style name="MyCustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="errorTextColor">#8B0000</item>
+    <style name="PrimaryButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/primary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">24dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
+
+    <style name="SecondaryButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/secondary</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="cornerRadius">24dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
     </style>
 </resources>

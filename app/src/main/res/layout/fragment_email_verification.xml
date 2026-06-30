@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F9F4"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_back"
+            app:tint="#0B6623" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RecycleSnap"
+                android:textColor="#0B6623"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="48dp"
+        app:cardBackgroundColor="#0B6623"
+        app:cardCornerRadius="55dp"
+        app:cardElevation="0dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="26dp"
+            android:src="@drawable/ic_email"
+            app:tint="@android:color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="E-Mail verifizieren"
+        android:textColor="#111111"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:paddingHorizontal="16dp"
+        android:text="Eine Bestätigungs-E-Mail wurde an deine Adresse gesendet. Bitte klicke auf den Link in der E-Mail."
+        android:textColor="#444444"
+        android:textSize="18sp"
+        android:lineSpacingExtra="6dp" />
+
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="48dp"
+        android:indeterminateTint="#0B6623" />
+
+    <TextView
+        android:id="@+id/btn_resend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="48dp"
+        android:text="Link erneut senden"
+        android:textColor="#0B6623"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:padding="8dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:paddingHorizontal="24dp"
+        android:text="Keine E-Mail erhalten? Schaue bitte in deinem Spam-Ordner nach oder warte einen Moment."
+        android:textColor="#666666"
+        android:textSize="14sp"
+        android:lineSpacingExtra="2dp" />
+
+</LinearLayout>

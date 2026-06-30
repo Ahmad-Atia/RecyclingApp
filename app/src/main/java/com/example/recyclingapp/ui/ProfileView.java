@@ -6,27 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
-import com.example.recyclingapp.R;
 import com.example.recyclingapp.controllers.ProfileController;
-import com.example.recyclingapp.databinding.FragmentProfileBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.recyclingapp.databinding.FragmentProfileBinding;
+import com .example.recyclingapp.R;
 
 public class ProfileView extends Fragment {
 
@@ -49,6 +39,16 @@ public class ProfileView extends Fragment {
 
         String userId = currentUser.getUid();
 
+        String authName = currentUser.getDisplayName();
+        if (authName != null && !authName.isEmpty()) {
+            binding.profileName.setText(authName);
+        } else {
+            binding.profileName.setText("Neuer User");
+        }
+
+        binding.profileLevelText.setText("Level 1");
+        binding.profileCo2Text.setText("0.0kg CO2");
+
         FirebaseFirestore.getInstance()
                 .collection("users")
                 .document(userId)
@@ -65,6 +65,9 @@ public class ProfileView extends Fragment {
                         if (level != null) binding.profileLevelText.setText("Level " + level);
                         if (co2 != null) binding.profileCo2Text.setText(co2 + "kg CO2");
                     }
+                })
+                .addOnFailureListener(e -> {
+                    android.util.Log.e("ProfileFirestore", "Datenbank gesperrt: " + e.getMessage());
                 });
 
         binding.btnSaveAddress.setOnClickListener(v -> {
@@ -92,7 +95,6 @@ public class ProfileView extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
     }
 
     private void navigateToLogin(View view) {

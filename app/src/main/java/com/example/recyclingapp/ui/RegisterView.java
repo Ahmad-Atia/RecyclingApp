@@ -14,6 +14,12 @@ import com.example.recyclingapp.R;
 import com.example.recyclingapp.controllers.AuthController;
 import com.example.recyclingapp.databinding.FragmentRegisterBinding;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class RegisterView extends Fragment {
     private FragmentRegisterBinding binding;
     private AuthController authController;
@@ -24,29 +30,43 @@ public class RegisterView extends Fragment {
         authController = new AuthController();
 
         binding.btnRegister.setOnClickListener(v -> {
-            String name = binding.registerName.getText().toString().trim();
             String email = binding.registerEmail.getText().toString().trim();
-            String pass = binding.registerPassword.getText().toString().trim();
+            String password = binding.registerPassword.getText().toString().trim();
+            String name = binding.registerName.getText().toString().trim();
 
-            if (name.isEmpty() || email.isEmpty() || pass.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty() || name.isEmpty()) {
                 Toast.makeText(getContext(), "Bitte alle Felder ausfüllen", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            authController.register(name, email, pass, new AuthController.AuthCallback() {
-                @Override
-                public void onSuccess() {
-                    if (isAdded() && getView() != null) {
-                        Navigation.findNavController(getView()).navigate(R.id.action_registerView_to_dashboardView);
-                    }
-                }
-                @Override
-                public void onFailure(String message) {
-                    if (isAdded()) {
-                        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+            Toast.makeText(getContext(), "Registrierung läuft...", Toast.LENGTH_SHORT).show();
+
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+
+            auth.createUserWithEmailAndPassword(email, password)
+                    .addOnSuccessListener(authResult -> {
+                        FirebaseUser user = auth.getCurrentUser();
+
+                        if (user != null) {
+                            com.google.firebase.auth.UserProfileChangeRequest profileUpdates =
+                                    new com.google.firebase.auth.UserProfileChangeRequest.Builder()
+                                            .setDisplayName(name) // Hier setzen wir den echten Namen!
+                                            .build();
+
+                            user.updateProfile(profileUpdates)
+                                    .addOnCompleteListener(profileTask -> {
+                                        user.sendEmailVerification()
+                                                .addOnSuccessListener(unused -> {
+                                                    Toast.makeText(getContext(), "Bestätigungsmail versendet!", Toast.LENGTH_SHORT).show();
+                                                    Navigation.findNavController(binding.getRoot())
+                                                            .navigate(R.id.action_registerView_to_emailVerificationView);
+                                                });
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(regError -> {
+                        Toast.makeText(getContext(), "Registrierung fehlgeschlagen: " + regError.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    });
         });
 
         binding.btnBackToLogin.setOnClickListener(v -> {

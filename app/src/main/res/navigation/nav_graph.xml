@@ -6,6 +6,19 @@
     app:startDestination="@id/loginView">
 
     <fragment
+        android:id="@+id/onboardingView"
+        android:name="com.example.recyclingapp.ui.OnboardingView"
+        android:label="OnboardingView"
+        tools:layout="@layout/fragment_onboarding">
+
+        <action
+            android:id="@+id/action_onboardingView_to_loginView"
+            app:destination="@id/loginView"
+            app:popUpTo="@id/onboardingView"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
         android:id="@+id/loginView"
         android:name="com.example.recyclingapp.ui.LoginView"
         android:label="Login"
@@ -56,8 +69,20 @@
         android:label="Register"
         tools:layout="@layout/fragment_register">
         <action
-            android:id="@+id/action_registerView_to_dashboardView"
-            app:destination="@id/dashboardView" />
+            android:id="@+id/action_registerView_to_emailVerificationView"
+            app:destination="@id/emailVerificationView" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/emailVerificationView"
+        android:name="com.example.recyclingapp.ui.EmailVerificationView"
+        android:label="E-Mail Verifizierung"
+        tools:layout="@layout/fragment_email_verification">
+        <action
+            android:id="@+id/action_emailVerificationView_to_dashboardView"
+            app:destination="@id/dashboardView"
+            app:popUpTo="@id/loginView"
+            app:popUpToInclusive="false" />
     </fragment>
 
 </navigation>

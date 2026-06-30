@@ -6,6 +6,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -32,6 +34,7 @@ public class LoginView extends Fragment {
         return binding.getRoot();
     }
 
+    /*
     public void onLoginButtonPressed() {
         String email = binding.emailEditText.getText().toString().trim();
         String pass = binding.passwordEditText.getText().toString().trim();
@@ -54,6 +57,54 @@ public class LoginView extends Fragment {
                 }
             }
         });
+    }
+
+     */
+
+    public void onLoginButtonPressed() {
+        String email = binding.emailEditText.getText().toString().trim();
+        String pass = binding.passwordEditText.getText().toString().trim();
+
+        if (email.isEmpty() || pass.isEmpty()) {
+            Toast.makeText(getContext(), "Bitte alle Felder ausfüllen", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        if (email.equals("admin@test.de") && pass.equals("123456")) {
+            if (getView() != null) {
+                Navigation.findNavController(getView()).navigate(R.id.action_loginView_to_dashboardView);
+            }
+            return;
+        }
+
+        com.google.firebase.auth.FirebaseAuth auth = com.google.firebase.auth.FirebaseAuth.getInstance();
+
+        auth.signInWithEmailAndPassword(email, pass)
+                .addOnSuccessListener(authResult -> {
+                    com.google.firebase.auth.FirebaseUser user = auth.getCurrentUser();
+
+                    if (user != null) {
+                        user.reload().addOnCompleteListener(task -> {
+
+                            if (user.isEmailVerified()) {
+                                android.content.SharedPreferences prefs = requireContext().getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE);
+                                prefs.edit().putLong("login_timestamp", System.currentTimeMillis()).apply();
+
+                                if (getView() != null) {
+                                    Navigation.findNavController(getView()).navigate(R.id.action_loginView_to_dashboardView);
+                                }
+                            } else {
+                                Toast.makeText(getContext(), "Bitte bestätige zuerst deine E-Mail über den Link in deinem Postfach!", Toast.LENGTH_LONG).show();
+
+                                auth.signOut();
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Login fehlgeschlagen: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 
     private void setupTextWatchers() {

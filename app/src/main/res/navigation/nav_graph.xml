@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_dashboardView_to_cameraView"
             app:destination="@id/nav_scan" />
+        <action
+            android:id="@+id/action_dashboardView_to_resultView"
+            app:destination="@id/resultView" />
     </fragment>
 
     <fragment
@@ -49,6 +52,12 @@
         android:id="@+id/nav_profile"
         android:name="com.example.recyclingapp.ui.ProfileView" android:label="Profile"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/nav_disposal"
+        android:name="com.example.recyclingapp.ui.DisposalListView"
+        android:label="Standorte"
+        tools:layout="@layout/fragment_disposal_list" />
 
     <fragment
         android:id="@+id/registerView"

@@ -27,13 +27,32 @@ public class ResultView extends Fragment {
     }
 
     public void render(ScanResult result) {
-        binding.detectedItemsTextView.setText("Detected: " + String.join(", ", result.getDetectedItems()));
+        StringBuilder itemsText = new StringBuilder("Detected: ");
+        if (result.getDetectedItems() != null) {
+            for (int i = 0; i < result.getDetectedItems().size(); i++) {
+                itemsText.append(result.getDetectedItems().get(i));
+                if (i < result.getDetectedItems().size() - 1) {
+                    itemsText.append(", ");
+                }
+            }
+        }
+        binding.detectedItemsTextView.setText(itemsText.toString());
         binding.depositTextView.setText("Deposit: " + (result.isDepositFound() ? "Yes" : "No"));
         // Load image into binding.resultImageView (e.g. using Glide)
     }
 
     public void onFindDisposalPointPressed() {
-        scanController.getDisposalPoints("item_id");
+        scanController.getDisposalPoints(51.5136, 7.4653, new com.example.recyclingapp.models.DisposalPointsManager.PointsCallback() {
+            @Override
+            public void onSuccess(java.util.List<com.example.recyclingapp.models.DisposalPoint> points) {
+                // Update UI
+            }
+
+            @Override
+            public void onError(String error) {
+                // Log error
+            }
+        });
     }
 
     @Override

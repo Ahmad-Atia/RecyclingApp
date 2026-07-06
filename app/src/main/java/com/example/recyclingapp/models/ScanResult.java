@@ -9,7 +9,7 @@ public class ScanResult {
     private String id;
     private Date timestamp;
     private String imageUrl;
-    private List<String> detectedItems;
+    private List<Item> detectedItems;
     private boolean depositFound;
 
     public ScanResult() {
@@ -25,11 +25,15 @@ public class ScanResult {
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
-    public List<String> getDetectedItems() { return detectedItems; }
-    public void setDetectedItems(List<String> detectedItems) { this.detectedItems = detectedItems; }
+    public List<Item> getDetectedItems() { return detectedItems; }
+    public void setDetectedItems(List<Item> detectedItems) { this.detectedItems = detectedItems; }
 
     public boolean isDepositFound() { return depositFound; }
     public void setDepositFound(boolean depositFound) { this.depositFound = depositFound; }
+
+    public void disposalInstructions(String id) {
+        // Implementation
+    }
 
     public Map<String, Object> toMap() {
         Map<String, Object> result = new HashMap<>();
@@ -54,7 +58,7 @@ public class ScanResult {
         }
 
         scanResult.setImageUrl((String) data.get("imageUrl"));
-        scanResult.setDetectedItems((List<String>) data.get("detectedItems"));
+        scanResult.setDetectedItems((List<Item>) data.get("detectedItems"));
         Boolean deposit = (Boolean) data.get("depositFound");
         scanResult.setDepositFound(deposit != null ? deposit : false);
         return scanResult;

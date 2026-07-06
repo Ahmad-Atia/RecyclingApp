@@ -29,14 +29,14 @@ public class ScanVerlaufEintrag {
         String titel = "Gescannter Gegenstand";
         String kategorie = "SONSTIGES";
 
-        List<String> detectedItems = result.getDetectedItems();
+        List<Item> detectedItems = result.getDetectedItems();
         if (detectedItems != null) {
-            for (String item : detectedItems) {
-                String erkannteKategorie = kategorieAusText(item);
+            for (Item item : detectedItems) {
+                String erkannteKategorie = kategorieAusText(item.getName());
                 if (erkannteKategorie != null) {
                     kategorie = erkannteKategorie;
                 } else {
-                    titel = item;
+                    titel = item.getName();
                 }
             }
         }

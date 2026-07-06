@@ -50,11 +50,46 @@
             app:destination="@id/resultView" />
     </fragment>
 
-    <fragment
+    <dialog
         android:id="@+id/resultView"
         android:name="com.example.recyclingapp.ui.ResultView"
         android:label="Scan Result"
-        tools:layout="@layout/fragment_result" />
+        tools:layout="@layout/fragment_result">
+        <action
+            android:id="@+id/action_resultView_to_itemSearchView"
+            app:destination="@id/itemSearchView" />
+        <action
+            android:id="@+id/action_resultView_to_trennAnleitungView"
+            app:destination="@id/trennAnleitungView" />
+        <action
+            android:id="@+id/action_resultView_to_disposalDetailView"
+            app:destination="@id/disposalDetailView" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/itemSearchView"
+        android:name="com.example.recyclingapp.ui.ItemSearchView"
+        android:label="Suche"
+        tools:layout="@layout/fragment_item_search">
+        <action
+            android:id="@+id/action_itemSearchView_to_trennAnleitungView"
+            app:destination="@id/trennAnleitungView" />
+        <action
+            android:id="@+id/action_itemSearchView_to_disposalDetailView"
+            app:destination="@id/disposalDetailView" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/trennAnleitungView"
+        android:name="com.example.recyclingapp.ui.TrennAnleitungView"
+        android:label="Trenn-Anleitung"
+        tools:layout="@layout/fragment_trenn_anleitung" />
+
+    <fragment
+        android:id="@+id/disposalDetailView"
+        android:name="com.example.recyclingapp.ui.DisposalDetailView"
+        android:label="Entsorgung"
+        tools:layout="@layout/fragment_disposal_detail" />
 
     <fragment
         android:id="@+id/calendarFragment"

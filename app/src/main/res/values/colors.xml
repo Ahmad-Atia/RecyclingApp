@@ -13,4 +13,13 @@
     <color name="nav_active_green">#0C6318</color>
     <color name="nav_inactive_gray">#757575</color>
     <color name="nav_indicator_light_green">#BDEFBE</color>
+
+    <!-- Waste Categories -->
+    <color name="cat_sondermuell">#D32F2F</color>
+    <color name="cat_gelbe_tonne">#FF9800</color>
+    <color name="cat_papier">#1976D2</color>
+    <color name="cat_bio">#4CAF50</color>
+    <color name="cat_glas">#388E3C</color>
+    <color name="cat_pfand">#2E7D32</color>
+    <color name="cat_restmuell">#616161</color>
 </resources>

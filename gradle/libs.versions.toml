@@ -15,8 +15,8 @@ cronetEmbedded = "143.7445.0"
 tracingPerfettoHandshake = "1.0.1"
 
 
-googleServices = "4.4.2"
-firebaseBom = "33.9.0"
+googleServices = "4.5.0"
+firebaseBom = "34.15.0"
 
 
 [libraries]

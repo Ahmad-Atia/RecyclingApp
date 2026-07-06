@@ -23,4 +23,9 @@ public class DisposalPoint {
 
     public Location getLocation() { return location; }
     public void setLocation(Location location) { this.location = location; }
+
+    public double getDistance() {
+        // Dummy distance for now
+        return 450 + (Math.random() * 1000);
+    }
 }

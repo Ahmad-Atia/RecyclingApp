@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.example.recyclingapp"
-    compileSdk = 36
+    compileSdk = 35
 
 
     buildFeatures {
@@ -85,7 +85,6 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
-    implementation(libs.camera.camera2.pipe)
     implementation(libs.cronet.embedded)
     implementation(libs.tracing.perfetto.handshake)
     testImplementation(libs.junit)
@@ -97,11 +96,10 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
     implementation("androidx.browser:browser:1.8.0")
-    implementation("androidx.camera:camera-camera2-pipe:1.0.0-beta03")
 
 
-    implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
-    implementation("com.google.firebase:firebase-analytics")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-firestore")

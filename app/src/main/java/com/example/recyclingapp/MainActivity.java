@@ -4,7 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
 import androidx.navigation.fragment.NavHostFragment;
@@ -60,7 +65,43 @@ public class MainActivity extends AppCompatActivity {
                         bottomNav.setVisibility(View.VISIBLE);
                     }
                 });
+
+                // Reserviert automatisch genug Platz am unteren Rand jeder Seite, damit die
+                // schwebende Bottom-Nav niemals Inhalte verdeckt - ganz ohne manuelles Padding
+                // in den einzelnen Fragment-Layouts.
+                navHostFragment.getChildFragmentManager().registerFragmentLifecycleCallbacks(
+                        new FragmentManager.FragmentLifecycleCallbacks() {
+                            @Override
+                            public void onFragmentViewCreated(@NonNull FragmentManager fm, @NonNull Fragment f,
+                                                               @NonNull View v, @Nullable Bundle savedInstanceState) {
+                                v.post(() -> reserviereBottomNavPlatz(v, bottomNav));
+                            }
+                        }, false);
             }
+        }
+    }
+
+    private void reserviereBottomNavPlatz(View fragmentRoot, BottomNavigationView bottomNav) {
+        if (bottomNav.getVisibility() != View.VISIBLE) {
+            return;
+        }
+        if (bottomNav.getHeight() == 0) {
+            bottomNav.post(() -> reserviereBottomNavPlatz(fragmentRoot, bottomNav));
+            return;
+        }
+
+        ViewGroup.MarginLayoutParams navParams = (ViewGroup.MarginLayoutParams) bottomNav.getLayoutParams();
+        int puffer = (int) (8 * getResources().getDisplayMetrics().density);
+        int platzbedarf = bottomNav.getHeight() + navParams.bottomMargin + puffer;
+
+        fragmentRoot.setPadding(
+                fragmentRoot.getPaddingLeft(),
+                fragmentRoot.getPaddingTop(),
+                fragmentRoot.getPaddingRight(),
+                fragmentRoot.getPaddingBottom() + platzbedarf);
+
+        if (fragmentRoot instanceof ViewGroup) {
+            ((ViewGroup) fragmentRoot).setClipToPadding(false);
         }
     }
 

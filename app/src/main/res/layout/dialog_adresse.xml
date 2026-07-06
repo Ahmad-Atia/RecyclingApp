@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingTop="16dp">
+
+    <EditText
+        android:id="@+id/et_dialog_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name (z. B. Zuhause)"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/et_dialog_adresse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="Straße, PLZ Ort"
+        android:inputType="textPostalAddress" />
+
+    <CheckBox
+        android:id="@+id/cb_dialog_standard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Als Standardadresse festlegen" />
+
+</LinearLayout>

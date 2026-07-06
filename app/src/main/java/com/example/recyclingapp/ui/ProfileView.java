@@ -1,7 +1,6 @@
 package com.example.recyclingapp.ui;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,25 +10,22 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.example.recyclingapp.controllers.ProfileController;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.example.recyclingapp.databinding.FragmentProfileBinding;
-import com .example.recyclingapp.R;
+import com.example.recyclingapp.R;
 
 public class ProfileView extends Fragment {
 
     private FragmentProfileBinding binding;
     private FirebaseAuth mAuth;
-    private ProfileController profileController;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         mAuth = FirebaseAuth.getInstance();
-        profileController = new ProfileController();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
@@ -56,32 +52,29 @@ public class ProfileView extends Fragment {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists() && isAdded() && binding != null) {
                         String name = documentSnapshot.getString("name");
-                        String adresse = documentSnapshot.getString("address");
                         Long level = documentSnapshot.getLong("level");
                         Double co2 = documentSnapshot.getDouble("co2");
 
-                        if (name != null) binding.profileName.setText(name);
-                        if (adresse != null) binding.profileAddress.setText(adresse);
+                        if (name != null && !name.isEmpty()) binding.profileName.setText(name);
                         if (level != null) binding.profileLevelText.setText("Level " + level);
                         if (co2 != null) binding.profileCo2Text.setText(co2 + "kg CO2");
                     }
                 })
                 .addOnFailureListener(e -> {
-                    android.util.Log.e("ProfileFirestore", "Datenbank gesperrt: " + e.getMessage());
+                    android.util.Log.e("ProfileFirestore", "Datenbank-Abfrage blockiert: " + e.getMessage());
                 });
 
-        binding.btnSaveAddress.setOnClickListener(v -> {
-            String neueAdresse = binding.profileAddress.getText().toString().trim();
+        binding.btnStats.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_nav_profile_to_statistikView));
 
-            if (TextUtils.isEmpty(neueAdresse)) {
-                binding.profileAddress.setError("Bitte gib eine Adresse ein.");
-                return;
-            }
+        binding.rowStandorte.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_nav_profile_to_adressenView));
 
-            profileController.updateAddress(userId, neueAdresse);
-            Toast.makeText(getActivity(), "Adresse erfolgreich aktualisiert!", Toast.LENGTH_SHORT).show();
-            binding.profileAddress.clearFocus();
-        });
+        binding.rowScanVerlauf.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_nav_profile_to_scanVerlaufView));
+
+        binding.rowBenachrichtigung.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_nav_profile_to_benachrichtigungenView));
 
         binding.btnLogout.setOnClickListener(v -> {
             mAuth.signOut();
@@ -101,7 +94,9 @@ public class ProfileView extends Fragment {
         try {
             Navigation.findNavController(view).navigate(R.id.loginView);
         } catch (Exception e) {
-            Toast.makeText(getActivity(), "Navigationsfehler", Toast.LENGTH_SHORT).show();
+            if (getActivity() != null) {
+                Toast.makeText(getActivity(), "Navigationsfehler", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

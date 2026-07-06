@@ -41,7 +41,7 @@ public class DashboardView extends Fragment {
             FirebaseFirestore.getInstance().collection("users").document(uid)
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
+                        if (documentSnapshot.exists() && isAdded() && binding != null) {
                             User user = User.fromMap(documentSnapshot.getData());
                             render(user);
                         }
@@ -50,6 +50,7 @@ public class DashboardView extends Fragment {
     }
 
     public void render(User user) {
+        if (binding == null) return;
         binding.userEmailTextView.setText("Email: " + user.getEmail());
         binding.ecoScoreTextView.setText("Eco Score: " + user.getEcoScore());
     }

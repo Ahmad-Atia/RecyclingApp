@@ -55,13 +55,63 @@
 
     <fragment
         android:id="@+id/calendarFragment"
-        android:name="com.example.recyclingapp.ui.CalendarView" android:label="Calendar"
-        tools:layout="@layout/fragment_history" />
+        android:name="com.example.recyclingapp.ui.CalendarView" android:label="Abfall-Kalender"
+        tools:layout="@layout/fragment_history">
+        <action
+            android:id="@+id/action_calendarFragment_to_adressenView"
+            app:destination="@id/adressenView" />
+        <action
+            android:id="@+id/action_calendarFragment_to_abholortAuswahlView"
+            app:destination="@id/abholortAuswahlView" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/abholortAuswahlView"
+        android:name="com.example.recyclingapp.ui.AbholortAuswahlView"
+        android:label="Abholort festlegen"
+        tools:layout="@layout/fragment_abholort_auswahl" />
 
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.example.recyclingapp.ui.ProfileView" android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_nav_profile_to_statistikView"
+            app:destination="@id/statistikView" />
+        <action
+            android:id="@+id/action_nav_profile_to_scanVerlaufView"
+            app:destination="@id/scanVerlaufView" />
+        <action
+            android:id="@+id/action_nav_profile_to_benachrichtigungenView"
+            app:destination="@id/benachrichtigungenView" />
+        <action
+            android:id="@+id/action_nav_profile_to_adressenView"
+            app:destination="@id/adressenView" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/statistikView"
+        android:name="com.example.recyclingapp.ui.StatistikView"
+        android:label="Statistiken"
+        tools:layout="@layout/fragment_statistik" />
+
+    <fragment
+        android:id="@+id/benachrichtigungenView"
+        android:name="com.example.recyclingapp.ui.BenachrichtigungenView"
+        android:label="Benachrichtigungen"
+        tools:layout="@layout/fragment_benachrichtigungen" />
+
+    <fragment
+        android:id="@+id/adressenView"
+        android:name="com.example.recyclingapp.ui.AdressenView"
+        android:label="Adressen"
+        tools:layout="@layout/fragment_adressen" />
+
+    <fragment
+        android:id="@+id/scanVerlaufView"
+        android:name="com.example.recyclingapp.ui.ScanVerlaufView"
+        android:label="Scan-Verlauf"
+        tools:layout="@layout/fragment_scan_verlauf" />
 
     <fragment
         android:id="@+id/registerView"

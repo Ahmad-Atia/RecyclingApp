@@ -45,7 +45,14 @@ public class ScanResult {
         if (data == null) return null;
         ScanResult scanResult = new ScanResult();
         scanResult.setId((String) data.get("id"));
-        scanResult.setTimestamp((Date) data.get("timestamp"));
+
+        Object rohZeitstempel = data.get("timestamp");
+        if (rohZeitstempel instanceof com.google.firebase.Timestamp) {
+            scanResult.setTimestamp(((com.google.firebase.Timestamp) rohZeitstempel).toDate());
+        } else if (rohZeitstempel instanceof Date) {
+            scanResult.setTimestamp((Date) rohZeitstempel);
+        }
+
         scanResult.setImageUrl((String) data.get("imageUrl"));
         scanResult.setDetectedItems((List<String>) data.get("detectedItems"));
         Boolean deposit = (Boolean) data.get("depositFound");

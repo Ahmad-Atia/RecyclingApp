@@ -109,6 +109,7 @@ public class DashboardView extends Fragment {
 
     public void render(User user) {
         if (binding != null) {
+            binding.userGreetingTextView.setText("Hallo, " + user.getName() + "!");
             binding.userEmailTextView.setText("Email: " + user.getEmail());
             binding.ecoScoreTextView.setText("Eco Score: " + user.getEcoScore());
         }

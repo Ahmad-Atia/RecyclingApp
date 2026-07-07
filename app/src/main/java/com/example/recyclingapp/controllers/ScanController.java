@@ -182,10 +182,6 @@ public class ScanController {
         }
     }
 
-    public void getDisposalPoints(double lat, double lon, DisposalPointsManager.PointsCallback callback) {
-        new DisposalPointsManager().fetchPoints(lat, lon, callback);
-    }
-
     public void fetchScanVerlauf(String uid, Consumer<List<ScanVerlaufEintrag>> onSuccess, Consumer<Exception> onFailure) {
         db.collection("users").document(uid)
                 .get()

@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.recyclingapp.R;
+import com.example.recyclingapp.controllers.DisposalController;
 import com.example.recyclingapp.databinding.FragmentDisposalDetailBinding;
 import com.example.recyclingapp.models.DisposalPoint;
 import com.example.recyclingapp.models.DisposalPointsManager;
@@ -20,11 +21,13 @@ import java.util.List;
 
 public class DisposalDetailView extends Fragment {
     private FragmentDisposalDetailBinding binding;
+    private DisposalController disposalController;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentDisposalDetailBinding.inflate(inflater, container, false);
+        disposalController = new DisposalController(requireContext());
         
         String itemName = getArguments() != null ? getArguments().getString("itemName") : "Gegenstand";
         String itemCategory = getArguments() != null ? getArguments().getString("itemCategory") : "KATEGORIE";
@@ -96,16 +99,15 @@ public class DisposalDetailView extends Fragment {
     }
 
     private void loadNearbyPoints() {
-        double lat = 52.5200;
-        double lon = 13.4050;
-
-        new DisposalPointsManager().fetchPoints(lat, lon, new DisposalPointsManager.PointsCallback() {
+        disposalController.fetchDisposalPointsForCurrentUser(new DisposalPointsManager.PointsCallback() {
             @Override
             public void onSuccess(List<DisposalPoint> points) {
-                if (isAdded() && binding != null) {
-                    DisposalPointAdapter adapter = new DisposalPointAdapter(points);
-                    binding.disposalPointsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                    binding.disposalPointsRecyclerView.setAdapter(adapter);
+                if (isAdded() && binding != null && getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        DisposalPointAdapter adapter = new DisposalPointAdapter(points);
+                        binding.disposalPointsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                        binding.disposalPointsRecyclerView.setAdapter(adapter);
+                    });
                 }
             }
 

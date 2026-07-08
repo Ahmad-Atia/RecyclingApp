@@ -143,12 +143,15 @@ public class ScanController {
             return;
         }
 
+        double co2Saved = calculateCo2Savings(result.getDetectedItems());
+
         // Speichern als Array-Eintrag im User-Dokument (statt Subcollection),
         // da die Firestore-Regeln aktuell nur Zugriff auf das User-Dokument erlauben.
         java.util.Map<String, Object> updates = new java.util.HashMap<>();
         updates.put("scans", FieldValue.arrayUnion(result.toMap()));
         updates.put("gescannteGegenstaende", FieldValue.increment(1));
         updates.put("ecoScore", FieldValue.increment(10)); // 10 Punkte pro Scan
+        updates.put("co2Eingespart", FieldValue.increment(co2Saved));
 
         db.collection("users").document(uid)
                 .update(updates)
@@ -169,6 +172,27 @@ public class ScanController {
                                 callback.onScanFailed(e2);
                             });
                 });
+    }
+
+    private double calculateCo2Savings(List<Item> items) {
+        double total = 0;
+        if (items == null) return 0;
+        
+        for (Item item : items) {
+            String cat = item.getCategory().toLowerCase();
+            if (cat.contains("glas")) {
+                total += 0.5;
+            } else if (cat.contains("gelb") || cat.contains("plastik") || cat.contains("metall")) {
+                total += 0.4;
+            } else if (cat.contains("papier")) {
+                total += 0.3;
+            } else if (cat.contains("bio")) {
+                total += 0.1;
+            } else if (cat.contains("pfand")) {
+                total += 0.2;
+            }
+        }
+        return total;
     }
 
     private String encodeFileToBase64(File file) {

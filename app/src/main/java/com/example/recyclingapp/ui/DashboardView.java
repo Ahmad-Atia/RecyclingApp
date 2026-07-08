@@ -17,22 +17,27 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.recyclingapp.R;
 import com.example.recyclingapp.databinding.FragmentDashboardBinding;
 import com.example.recyclingapp.controllers.ProfileController;
 import com.example.recyclingapp.controllers.ScanController;
 import com.example.recyclingapp.models.ScanResult;
 import com.example.recyclingapp.models.User;
+import com.example.recyclingapp.ui.adapters.ScanVerlaufAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DashboardView extends Fragment {
     private FragmentDashboardBinding binding;
     private ProfileController profileController;
     private ScanController scanController;
+    private ScanVerlaufAdapter scanAdapter;
 
     private final ActivityResultLauncher<String> requestCameraPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -57,12 +62,34 @@ public class DashboardView extends Fragment {
         profileController = new ProfileController();
         scanController = new ScanController();
 
+        setupRecentScans();
+
         binding.viewCalendarButton.setOnClickListener(v -> onViewCalendarPressed());
         binding.startScanButton.setOnClickListener(v -> showScanOptionsDialog());
+        binding.btnAlleAnsehen.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_dashboardView_to_scanVerlaufView));
 
         loadUserData();
+        loadRecentScans();
 
         return binding.getRoot();
+    }
+
+    private void setupRecentScans() {
+        scanAdapter = new ScanVerlaufAdapter();
+        binding.rvRecentScans.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.rvRecentScans.setAdapter(scanAdapter);
+    }
+
+    private void loadRecentScans() {
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid != null) {
+            scanController.fetchScanVerlauf(uid, eintraege -> {
+                if (isAdded() && binding != null) {
+                    // Show only the last 3 scans on home page
+                    scanAdapter.submitList(eintraege.stream().limit(3).collect(Collectors.toList()));
+                }
+            }, e -> Log.e("DashboardView", "Fehler beim Laden des Verlaufs", e));
+        }
     }
 
     private void showScanOptionsDialog() {
@@ -156,8 +183,25 @@ public class DashboardView extends Fragment {
 
     public void render(User user) {
         if (binding == null) return;
-        binding.userEmailTextView.setText("Email: " + user.getEmail());
-        binding.ecoScoreTextView.setText("Eco Score: " + user.getEcoScore());
+        
+        String name = user.getName();
+        String email = user.getEmail();
+
+        if (name != null && !name.isEmpty()) {
+            binding.userGreetingTextView.setText("Hallo " + name + "!");
+        } else {
+            binding.userGreetingTextView.setText("Hallo!");
+        }
+
+        if (email != null) {
+            binding.userEmailTextView.setText(email);
+            binding.userEmailTextView.setVisibility(View.VISIBLE);
+        } else {
+            binding.userEmailTextView.setVisibility(View.GONE);
+        }
+
+        binding.ecoScoreTextView.setText(String.valueOf(user.getEcoScore()));
+        binding.co2TextView.setText(String.format(java.util.Locale.getDefault(), "%.1fkg", user.getCo2Eingespart()));
     }
 
     public void onViewCalendarPressed() {

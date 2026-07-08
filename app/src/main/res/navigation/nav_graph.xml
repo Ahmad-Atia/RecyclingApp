@@ -38,6 +38,9 @@
         <action
             android:id="@+id/action_dashboardView_to_resultView"
             app:destination="@id/resultView" />
+        <action
+            android:id="@+id/action_dashboardView_to_scanVerlaufView"
+            app:destination="@id/scanVerlaufView" />
     </fragment>
 
     <fragment

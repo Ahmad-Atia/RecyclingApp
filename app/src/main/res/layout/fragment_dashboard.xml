@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F9FBF4">
@@ -194,79 +195,25 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/btnAlleAnsehen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:text="Alle ansehen"
                 android:textColor="#1B5E20"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:clickable="true"
+                android:focusable="true" />
         </RelativeLayout>
 
-        <!-- Horizontal Scans List (Mock) -->
-        <HorizontalScrollView
+        <!-- Scans List -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRecentScans"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:layout_marginBottom="24dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <!-- Mock Scan Item 1 -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="140dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="12dp"
-                    android:layout_marginEnd="12dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/logo_icon"
-                            android:background="#EEEEEE" />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Wasserflasche"
-                            android:padding="8dp"
-                            android:textStyle="bold"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Mock Scan Item 2 -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="140dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="12dp"
-                    android:layout_marginEnd="12dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/logo_icon"
-                            android:background="#EEEEEE" />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Amazon Paket"
-                            android:padding="8dp"
-                            android:textStyle="bold"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-        </HorizontalScrollView>
+            android:nestedScrollingEnabled="false"
+            android:layout_marginBottom="24dp"
+            tools:listitem="@layout/item_scan_verlauf" />
 
         <!-- Stats Row -->
         <LinearLayout
@@ -290,6 +237,7 @@
                         android:layout_height="24dp"
                         android:src="@drawable/ic_co2" />
                     <TextView
+                        android:id="@+id/co2TextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="12.4kg"

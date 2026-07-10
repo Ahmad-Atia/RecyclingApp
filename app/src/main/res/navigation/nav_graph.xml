@@ -41,6 +41,9 @@
         <action
             android:id="@+id/action_dashboardView_to_scanVerlaufView"
             app:destination="@id/scanVerlaufView" />
+        <action
+            android:id="@+id/action_dashboardView_to_benachrichtigungenView"
+            app:destination="@id/benachrichtigungenView" />
     </fragment>
 
     <fragment

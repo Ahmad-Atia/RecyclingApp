@@ -4,6 +4,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.example.recyclingapp.BuildConfig;
+import com.example.recyclingapp.models.AppNotification;
 import com.example.recyclingapp.models.DisposalPointsManager;
 import com.example.recyclingapp.models.Item;
 import com.example.recyclingapp.models.ScanResult;
@@ -152,6 +153,16 @@ public class ScanController {
         updates.put("gescannteGegenstaende", FieldValue.increment(1));
         updates.put("ecoScore", FieldValue.increment(10)); // 10 Punkte pro Scan
         updates.put("co2Eingespart", FieldValue.increment(co2Saved));
+
+        // Neue Benachrichtigung auslösen
+        if (!result.getDetectedItems().isEmpty()) {
+            AppNotification notification = new AppNotification(
+                "Scan erfolgreich",
+                "Du hast " + result.getDetectedItems().size() + " Gegenstände gescannt und " + co2Saved + "kg CO2 gespart!",
+                AppNotification.Type.IMPACT
+            );
+            updates.put("notifications", FieldValue.arrayUnion(notification.toMap()));
+        }
 
         db.collection("users").document(uid)
                 .update(updates)

@@ -20,8 +20,10 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.recyclingapp.R;
 import com.example.recyclingapp.databinding.FragmentDashboardBinding;
+import com.example.recyclingapp.controllers.NotificationController;
 import com.example.recyclingapp.controllers.ProfileController;
 import com.example.recyclingapp.controllers.ScanController;
+import com.example.recyclingapp.models.AppNotification;
 import com.example.recyclingapp.models.ScanResult;
 import com.example.recyclingapp.models.User;
 import com.example.recyclingapp.ui.adapters.ScanVerlaufAdapter;
@@ -37,6 +39,7 @@ public class DashboardView extends Fragment {
     private FragmentDashboardBinding binding;
     private ProfileController profileController;
     private ScanController scanController;
+    private NotificationController notificationController;
     private ScanVerlaufAdapter scanAdapter;
 
     private final ActivityResultLauncher<String> requestCameraPermissionLauncher =
@@ -61,17 +64,38 @@ public class DashboardView extends Fragment {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         profileController = new ProfileController();
         scanController = new ScanController();
+        notificationController = new NotificationController();
 
         setupRecentScans();
 
         binding.viewCalendarButton.setOnClickListener(v -> onViewCalendarPressed());
         binding.startScanButton.setOnClickListener(v -> showScanOptionsDialog());
         binding.btnAlleAnsehen.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_dashboardView_to_scanVerlaufView));
+        binding.btnNotifications.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_dashboardView_to_benachrichtigungenView));
 
         loadUserData();
         loadRecentScans();
+        checkUnreadNotifications();
 
         return binding.getRoot();
+    }
+
+    private void checkUnreadNotifications() {
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid != null) {
+            notificationController.fetchNotifications(uid, list -> {
+                if (isAdded() && binding != null) {
+                    boolean hasUnread = false;
+                    for (AppNotification n : list) {
+                        if (!n.isRead()) {
+                            hasUnread = true;
+                            break;
+                        }
+                    }
+                    binding.notificationBadge.setVisibility(hasUnread ? View.VISIBLE : View.GONE);
+                }
+            }, e -> Log.e("DashboardView", "Fehler beim Laden der Benachrichtigungen", e));
+        }
     }
 
     private void setupRecentScans() {

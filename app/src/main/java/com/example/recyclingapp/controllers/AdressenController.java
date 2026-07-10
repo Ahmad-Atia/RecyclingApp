@@ -1,13 +1,16 @@
 package com.example.recyclingapp.controllers;
 
 import com.example.recyclingapp.models.Adresse;
+import com.example.recyclingapp.models.AppNotification;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -96,8 +99,22 @@ public class AdressenController {
         for (Adresse adresse : adressen) {
             maps.add(adresse.toMap());
         }
-        userRef(uid).set(Collections.singletonMap("adressen", maps), SetOptions.merge())
-                .addOnSuccessListener(v -> onSuccess.run())
+        
+        Map<String, Object> data = new HashMap<>();
+        data.put("adressen", maps);
+        
+        // Wenn eine Adresse geändert wurde, eine Benachrichtigung senden
+        AppNotification notification = new AppNotification(
+            "Adresse aktualisiert",
+            "Deine Abholtermine werden nun für die neue Adresse berechnet.",
+            AppNotification.Type.PICKUP
+        );
+        
+        userRef(uid).set(data, SetOptions.merge())
+                .addOnSuccessListener(v -> {
+                    userRef(uid).update("notifications", FieldValue.arrayUnion(notification.toMap()));
+                    onSuccess.run();
+                })
                 .addOnFailureListener(onFailure::accept);
     }
 }

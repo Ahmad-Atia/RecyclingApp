@@ -1,6 +1,7 @@
 package com.example.recyclingapp.models;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,18 @@ public class Adresse {
 
     public List<Abfuhrregel> getAbfuhrregeln() { return abfuhrregeln; }
     public void setAbfuhrregeln(List<Abfuhrregel> abfuhrregeln) { this.abfuhrregeln = abfuhrregeln; }
+
+    /** Frühester bevorstehender Abholtermin über alle Abfuhrregeln dieser Adresse, oder null falls keine hinterlegt sind. */
+    public Calendar naechsteAbholungAb(Calendar ab) {
+        Calendar fruehester = null;
+        for (Abfuhrregel regel : abfuhrregeln) {
+            Calendar termin = regel.naechsterTerminAb(ab);
+            if (fruehester == null || termin.before(fruehester)) {
+                fruehester = termin;
+            }
+        }
+        return fruehester;
+    }
 
     public Map<String, Object> toMap() {
         Map<String, Object> result = new HashMap<>();

@@ -7,8 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.recyclingapp.databinding.ItemAdresseBinding;
 import com.example.recyclingapp.models.Adresse;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class AdressenAdapter extends RecyclerView.Adapter<AdressenAdapter.ViewHolder> {
 
@@ -50,6 +53,7 @@ public class AdressenAdapter extends RecyclerView.Adapter<AdressenAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ItemAdresseBinding binding;
+        private final SimpleDateFormat datumsFormat = new SimpleDateFormat("EEE, d. MMM", Locale.GERMANY);
 
         public ViewHolder(ItemAdresseBinding binding) {
             super(binding.getRoot());
@@ -59,7 +63,7 @@ public class AdressenAdapter extends RecyclerView.Adapter<AdressenAdapter.ViewHo
         public void bind(Adresse adresse, Listener listener) {
             binding.tvAdresseLabel.setText(adresse.getLabel());
             binding.tvAdresseText.setText(adresse.getAdresse());
-            
+
             if (adresse.getLabel() != null && adresse.getLabel().toLowerCase().contains("arbeit")) {
                 binding.tvAdresseIcon.setText("💼");
             } else {
@@ -67,6 +71,7 @@ public class AdressenAdapter extends RecyclerView.Adapter<AdressenAdapter.ViewHo
             }
 
             binding.rowStandardInfo.setVisibility(adresse.isIstStandard() ? View.VISIBLE : View.GONE);
+            binding.tvNaechsteAbholung.setText(naechsteAbholungText(adresse));
 
             binding.btnEditAdresse.setOnClickListener(v -> {
                 if (listener != null) listener.onEdit(adresse);
@@ -75,6 +80,28 @@ public class AdressenAdapter extends RecyclerView.Adapter<AdressenAdapter.ViewHo
             binding.btnDeleteAdresse.setOnClickListener(v -> {
                 if (listener != null) listener.onDelete(adresse);
             });
+        }
+
+        private String naechsteAbholungText(Adresse adresse) {
+            Calendar heute = Calendar.getInstance();
+            Calendar termin = adresse.naechsteAbholungAb(heute);
+            if (termin == null) {
+                return "Keine Abholtermine hinterlegt";
+            }
+
+            long tageDiff = Math.round((mitternacht(termin).getTimeInMillis() - mitternacht(heute).getTimeInMillis()) / 86400000.0);
+            if (tageDiff == 0) return "Nächste Abholung: Heute";
+            if (tageDiff == 1) return "Nächste Abholung: Morgen";
+            return "Nächste Abholung: " + datumsFormat.format(termin.getTime());
+        }
+
+        private static Calendar mitternacht(Calendar quelle) {
+            Calendar kopie = (Calendar) quelle.clone();
+            kopie.set(Calendar.HOUR_OF_DAY, 0);
+            kopie.set(Calendar.MINUTE, 0);
+            kopie.set(Calendar.SECOND, 0);
+            kopie.set(Calendar.MILLISECOND, 0);
+            return kopie;
         }
     }
 }

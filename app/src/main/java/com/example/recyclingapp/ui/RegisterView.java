@@ -41,6 +41,12 @@ public class RegisterView extends Fragment {
 
             Toast.makeText(getContext(), "Registrierung läuft...", Toast.LENGTH_SHORT).show();
 
+            SharedPreferences prefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+            prefs.edit()
+                    .putString("registered_name", name)
+                    .putString("registered_email", email)
+                    .apply();
+
             FirebaseAuth auth = FirebaseAuth.getInstance();
 
             auth.createUserWithEmailAndPassword(email, password)

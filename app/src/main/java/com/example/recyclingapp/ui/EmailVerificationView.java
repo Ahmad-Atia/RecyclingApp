@@ -70,13 +70,16 @@ public class EmailVerificationView extends Fragment {
 
                                 SharedPreferences localPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
                                 String name = localPrefs.getString("registered_name", "Neuer User");
+                                String email = localPrefs.getString("registered_email", freshUser.getEmail());
                                 String userId = freshUser.getUid();
 
                                 java.util.Map<String, Object> userData = new java.util.HashMap<>();
+                                userData.put("uid", userId);
+                                userData.put("email", email);
                                 userData.put("name", name);
                                 userData.put("address", "");
-                                userData.put("level", 1);
-                                userData.put("co2", 0.0);
+                                userData.put("ecoScore", 0);
+                                userData.put("co2Eingespart", 0.0);
 
                                 FirebaseFirestore.getInstance()
                                         .collection("users")

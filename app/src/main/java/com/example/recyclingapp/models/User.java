@@ -60,6 +60,15 @@ public class User {
         return 1 + (ecoScore / 200);
     }
 
+    /** Titel passend zum aktuellen Level. */
+    public String getUmweltheldTitel() {
+        int level = getUmweltheldLevel();
+        if (level >= 10) return "Umweltheld";
+        if (level >= 6) return "Recycling Profi";
+        if (level >= 3) return "Nachhaltigkeits-Enthusiast";
+        return "Recycling-Neuling";
+    }
+
     public Map<String, Object> toMap() {
         Map<String, Object> result = new HashMap<>();
         result.put("uid", uid);

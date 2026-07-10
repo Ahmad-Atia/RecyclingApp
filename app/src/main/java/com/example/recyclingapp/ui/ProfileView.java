@@ -50,6 +50,7 @@ public class ProfileView extends Fragment {
                         if (user != null) {
                             binding.profileName.setText(user.getName() != null ? user.getName() : "User");
                             binding.profileLevelText.setText("Level " + user.getUmweltheldLevel());
+                            binding.profileLevelTitle.setText(user.getUmweltheldTitel());
                             binding.profileCo2Text.setText(String.format(java.util.Locale.getDefault(), "%.1fkg CO2", user.getCo2Eingespart()));
                         }
                     }

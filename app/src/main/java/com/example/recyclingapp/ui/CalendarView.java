@@ -18,6 +18,7 @@ import com.example.recyclingapp.ui.adapters.AbholTerminAdapter;
 import com.example.recyclingapp.controllers.AdressenController;
 import com.example.recyclingapp.databinding.FragmentHistoryBinding;
 import com.example.recyclingapp.databinding.ItemKalenderTagBinding;
+import com.example.recyclingapp.models.Abfuhrregel;
 import com.example.recyclingapp.models.Adresse;
 import com.example.recyclingapp.models.AbholTermin;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,7 +43,7 @@ public class CalendarView extends Fragment implements AbholTerminAdapter.Listene
     private SharedPreferences prefs;
     private String uid;
     private Calendar angezeigterMonat;
-    private final List<AbholTermin> abholTermine = new ArrayList<>();
+    private List<Abfuhrregel> aktuelleRegeln = new ArrayList<>();
 
     @Nullable
     @Override
@@ -52,14 +53,9 @@ public class CalendarView extends Fragment implements AbholTerminAdapter.Listene
         prefs = requireContext().getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE);
         angezeigterMonat = Calendar.getInstance();
 
-        // TODO: abholTermine mit echten Abfuhrterminen befüllen (z.B. via ICS-Import oder kommunale API),
-        // sobald eine echte Datenquelle für Abfuhrtermine angebunden ist. Bis dahin Beispieldaten.
-        abholTermine.addAll(erzeugeBeispielTermine());
-
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         }
-        ladeAbholort();
 
         binding.btnEditAbholort.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.action_calendarFragment_to_abholortAuswahlView));
@@ -76,48 +72,17 @@ public class CalendarView extends Fragment implements AbholTerminAdapter.Listene
         adapter = new AbholTerminAdapter(this);
         binding.rvAbholungen.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvAbholungen.setAdapter(adapter);
-        adapter.submitList(alleTermineSortiert());
 
-        renderKalender();
+        ladeAbholort();
 
         return binding.getRoot();
-    }
-
-    private List<AbholTermin> erzeugeBeispielTermine() {
-        List<AbholTermin> liste = new ArrayList<>();
-        liste.add(new AbholTermin("Biotonne", heutePlusTage(2)));
-        liste.add(new AbholTermin("Gelber Sack", heutePlusTage(7)));
-        liste.add(new AbholTermin("Papiertonne", heutePlusTage(15)));
-        liste.add(new AbholTermin("Restmüll", heutePlusTage(24)));
-        return liste;
-    }
-
-    private Calendar heutePlusTage(int tage) {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_MONTH, tage);
-        return cal;
-    }
-
-    private List<AbholTermin> alleTermineSortiert() {
-        List<AbholTermin> sortiert = new ArrayList<>(abholTermine);
-        Collections.sort(sortiert, (a, b) -> a.getDatum().compareTo(b.getDatum()));
-        return sortiert;
-    }
-
-    private Set<String> ladeAusgewaehlteTonnen() {
-        Set<String> ausgewaehlt = new HashSet<>();
-        for (AbholTermin termin : abholTermine) {
-            String typ = termin.getTonnenTyp();
-            if (prefs.getBoolean(KEY_PREFIX_AUSGEWAEHLT + typ, true)) {
-                ausgewaehlt.add(typ);
-            }
-        }
-        return ausgewaehlt;
     }
 
     private void ladeAbholort() {
         if (uid == null) {
             binding.tvAbholort.setText("Keine Adresse hinterlegt");
+            aktuelleRegeln = new ArrayList<>();
+            aktualisiereAnzeige();
             return;
         }
         adressenController.fetchAdressen(uid, adressen -> {
@@ -133,11 +98,42 @@ public class CalendarView extends Fragment implements AbholTerminAdapter.Listene
                 standard = adressen.get(0);
             }
             binding.tvAbholort.setText(standard != null ? standard.getAdresse() : "Keine Adresse hinterlegt");
+            aktuelleRegeln = standard != null ? standard.getAbfuhrregeln() : new ArrayList<>();
+            aktualisiereAnzeige();
         }, e -> {
             if (binding != null) {
                 binding.tvAbholort.setText("Keine Adresse hinterlegt");
+                aktuelleRegeln = new ArrayList<>();
+                aktualisiereAnzeige();
             }
         });
+    }
+
+    private void aktualisiereAnzeige() {
+        adapter.submitList(kommendeTermineJeRegel());
+        renderKalender();
+    }
+
+    /** Ein AbholTermin je Regel: der nächste anstehende Termin ab heute. */
+    private List<AbholTermin> kommendeTermineJeRegel() {
+        List<AbholTermin> termine = new ArrayList<>();
+        Calendar heute = Calendar.getInstance();
+        for (Abfuhrregel regel : aktuelleRegeln) {
+            termine.add(new AbholTermin(regel.getTonnenTyp(), regel.naechsterTerminAb(heute)));
+        }
+        Collections.sort(termine, (a, b) -> a.getDatum().compareTo(b.getDatum()));
+        return termine;
+    }
+
+    private Set<String> ladeAusgewaehlteTonnen() {
+        Set<String> ausgewaehlt = new HashSet<>();
+        for (Abfuhrregel regel : aktuelleRegeln) {
+            String typ = regel.getTonnenTyp();
+            if (prefs.getBoolean(KEY_PREFIX_AUSGEWAEHLT + typ, true)) {
+                ausgewaehlt.add(typ);
+            }
+        }
+        return ausgewaehlt;
     }
 
     private void renderKalender() {
@@ -182,7 +178,7 @@ public class CalendarView extends Fragment implements AbholTerminAdapter.Listene
                     zellBinding.tvTagNummer.setTextColor(gehoertZuMonat ? 0xFF333333 : 0xFFC0C0C0);
                 }
 
-                AbholTermin treffer = findeTermin(zellDatum, ausgewaehlteTonnen);
+                Abfuhrregel treffer = findeRegelFuerTag(zellDatum, ausgewaehlteTonnen);
                 if (treffer != null) {
                     zellBinding.vTagPunkt.setVisibility(View.VISIBLE);
                     GradientDrawable punkt = (GradientDrawable) zellBinding.vTagPunkt.getBackground().mutate();
@@ -199,10 +195,10 @@ public class CalendarView extends Fragment implements AbholTerminAdapter.Listene
         }
     }
 
-    private AbholTermin findeTermin(Calendar tag, Set<String> ausgewaehlteTonnen) {
-        for (AbholTermin termin : abholTermine) {
-            if (ausgewaehlteTonnen.contains(termin.getTonnenTyp()) && istGleicherTag(termin.getDatum(), tag)) {
-                return termin;
+    private Abfuhrregel findeRegelFuerTag(Calendar tag, Set<String> ausgewaehlteTonnen) {
+        for (Abfuhrregel regel : aktuelleRegeln) {
+            if (ausgewaehlteTonnen.contains(regel.getTonnenTyp()) && regel.trifftAufTag(tag)) {
+                return regel;
             }
         }
         return null;

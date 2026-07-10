@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.recyclingapp.models.User;
 import com.example.recyclingapp.databinding.FragmentProfileBinding;
 import com.example.recyclingapp.R;
 
@@ -35,14 +36,8 @@ public class ProfileView extends Fragment {
 
         String userId = currentUser.getUid();
 
-        String authName = currentUser.getDisplayName();
-        if (authName != null && !authName.isEmpty()) {
-            binding.profileName.setText(authName);
-        } else {
-            binding.profileName.setText("Neuer User");
-        }
-
-        binding.profileLevelText.setText("Level 1");
+        binding.profileName.setText("Lade...");
+        binding.profileLevelText.setText("...");
         binding.profileCo2Text.setText("0.0kg CO2");
 
         FirebaseFirestore.getInstance()
@@ -51,13 +46,12 @@ public class ProfileView extends Fragment {
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists() && isAdded() && binding != null) {
-                        String name = documentSnapshot.getString("name");
-                        Long level = documentSnapshot.getLong("level");
-                        Double co2 = documentSnapshot.getDouble("co2");
-
-                        if (name != null && !name.isEmpty()) binding.profileName.setText(name);
-                        if (level != null) binding.profileLevelText.setText("Level " + level);
-                        if (co2 != null) binding.profileCo2Text.setText(co2 + "kg CO2");
+                        User user = User.fromMap(documentSnapshot.getData());
+                        if (user != null) {
+                            binding.profileName.setText(user.getName() != null ? user.getName() : "User");
+                            binding.profileLevelText.setText("Level " + user.getUmweltheldLevel());
+                            binding.profileCo2Text.setText(String.format(java.util.Locale.getDefault(), "%.1fkg CO2", user.getCo2Eingespart()));
+                        }
                     }
                 })
                 .addOnFailureListener(e -> {

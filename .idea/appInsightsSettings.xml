@@ -6,14 +6,6 @@
         <entry key="Firebase Crashlytics">
           <value>
             <InsightsFilterSettings>
-              <option name="connection">
-                <ConnectionSetting>
-                  <option name="appId" value="com.example.recyclingapp" />
-                  <option name="mobileSdkAppId" value="1:616009876920:android:08e827b3a117a367173b4d" />
-                  <option name="projectId" value="recyclingapp-c050e" />
-                  <option name="projectNumber" value="616009876920" />
-                </ConnectionSetting>
-              </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
               <option name="timeIntervalDays" value="THIRTY_DAYS" />
               <option name="visibilityType" value="ALL" />

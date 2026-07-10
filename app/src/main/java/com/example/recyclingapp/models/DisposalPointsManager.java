@@ -16,7 +16,7 @@ public class DisposalPointsManager {
     }
 
     public void fetchPoints(double lat, double lon, final PointsCallback callback) {
-        String query = "[out:json];node[\"amenity\"=\"recycling\"](around:2000," + lat + "," + lon + ");out;";
+        String query = "[out:json];node[\"amenity\"=\"recycling\"](around:1000," + lat + "," + lon + ");out;";
         OverpassClient.getApiService().getRecyclingPoints(query).enqueue(new Callback<OverpassResponse>() {
             @Override
             public void onResponse(Call<OverpassResponse> call, Response<OverpassResponse> response) {

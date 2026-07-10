@@ -1,6 +1,8 @@
 package com.example.recyclingapp.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class User {
@@ -12,6 +14,7 @@ public class User {
     private double co2Eingespart;
     private int gescannteGegenstaende;
     private int tagesStreak;
+    private List<ScanResult> scans;
 
     public User() {
         // Required for Firestore
@@ -49,6 +52,9 @@ public class User {
     public int getTagesStreak() { return tagesStreak; }
     public void setTagesStreak(int tagesStreak) { this.tagesStreak = tagesStreak; }
 
+    public List<ScanResult> getScans() { return scans; }
+    public void setScans(List<ScanResult> scans) { this.scans = scans; }
+
     /** Umweltheld-Level, abgeleitet aus den Eco-Punkten (alle 200 Punkte ein Level). */
     public int getUmweltheldLevel() {
         return 1 + (ecoScore / 200);
@@ -64,6 +70,15 @@ public class User {
         result.put("co2Eingespart", co2Eingespart);
         result.put("gescannteGegenstaende", gescannteGegenstaende);
         result.put("tagesStreak", tagesStreak);
+        
+        if (scans != null) {
+            List<Map<String, Object>> scansList = new ArrayList<>();
+            for (ScanResult scan : scans) {
+                scansList.add(scan.toMap());
+            }
+            result.put("scans", scansList);
+        }
+        
         return result;
     }
 
@@ -86,6 +101,17 @@ public class User {
 
         Long streak = (Long) data.get("tagesStreak");
         user.setTagesStreak(streak != null ? streak.intValue() : 0);
+
+        Object scansObj = data.get("scans");
+        if (scansObj instanceof List) {
+            List<ScanResult> scansList = new ArrayList<>();
+            for (Object obj : (List<?>) scansObj) {
+                if (obj instanceof Map) {
+                    scansList.add(ScanResult.fromMap((Map<String, Object>) obj));
+                }
+            }
+            user.setScans(scansList);
+        }
 
         return user;
     }

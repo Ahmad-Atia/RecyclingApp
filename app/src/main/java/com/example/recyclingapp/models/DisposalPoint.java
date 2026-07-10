@@ -7,6 +7,8 @@ public class DisposalPoint {
     private String address;
     private Location location;
 
+    private double distance;
+
     public DisposalPoint() {}
 
     public String getPointId() { return pointId; }
@@ -23,4 +25,12 @@ public class DisposalPoint {
 
     public Location getLocation() { return location; }
     public void setLocation(Location location) { this.location = location; }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
 }

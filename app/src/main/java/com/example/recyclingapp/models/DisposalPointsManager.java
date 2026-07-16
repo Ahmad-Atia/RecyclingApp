@@ -16,6 +16,10 @@ public class DisposalPointsManager {
     }
 
     public void fetchPoints(double lat, double lon, final PointsCallback callback) {
+        fetchPointsWithRetry(lat, lon, callback, 0);
+    }
+
+    private void fetchPointsWithRetry(double lat, double lon, final PointsCallback callback, int retryCount) {
         String query = "[out:json];node[\"amenity\"=\"recycling\"](around:1000," + lat + "," + lon + ");out;";
         OverpassClient.getApiService().getRecyclingPoints(query).enqueue(new Callback<OverpassResponse>() {
             @Override
@@ -26,14 +30,25 @@ public class DisposalPointsManager {
                         disposalPoints.add(mapElementToModel(element));
                     }
                     callback.onSuccess(disposalPoints);
+                } else if ((response.code() == 504 || response.code() == 429) && retryCount < 2) {
+                    // Timeout or Rate Limit -> Try next server
+                    OverpassClient.switchToNextServer();
+                    fetchPointsWithRetry(lat, lon, callback, retryCount + 1);
+                } else if (response.code() == 504 || response.code() == 429) {
+                    callback.onError("Der Server ist aktuell überlastet. Bitte versuche es in Kürze erneut.");
                 } else {
-                    callback.onError("API Error: " + response.code());
+                    callback.onError("Fehler beim Laden der Entsorgungsstellen (Code: " + response.code() + ")");
                 }
             }
 
             @Override
             public void onFailure(Call<OverpassResponse> call, Throwable t) {
-                callback.onError(t.getMessage());
+                if (retryCount < 2) {
+                    OverpassClient.switchToNextServer();
+                    fetchPointsWithRetry(lat, lon, callback, retryCount + 1);
+                } else {
+                    callback.onError(t.getMessage());
+                }
             }
         });
     }

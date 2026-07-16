@@ -157,6 +157,18 @@
                 android:layout_marginTop="12dp"
                 tools:listitem="@layout/item_disposal_point" />
 
+            <TextView
+                android:id="@+id/tv_error_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Der Server ist aktuell überlastet."
+                android:textColor="#D32F2F"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
             <!-- Falsch erkannt link -->
             <TextView
                 android:id="@+id/wronglyIdentifiedText"

@@ -115,6 +115,7 @@ public class DisposalDetailView extends Fragment {
             public void onSuccess(List<DisposalPoint> points) {
                 if (isAdded() && binding != null && getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
+                        binding.tvErrorMessage.setVisibility(View.GONE);
                         DisposalPointAdapter adapter = new DisposalPointAdapter(points);
                         binding.disposalPointsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                         binding.disposalPointsRecyclerView.setAdapter(adapter);
@@ -124,7 +125,12 @@ public class DisposalDetailView extends Fragment {
 
             @Override
             public void onError(String error) {
-                // Log or handle error
+                if (isAdded() && binding != null && getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        binding.tvErrorMessage.setText(error);
+                        binding.tvErrorMessage.setVisibility(View.VISIBLE);
+                    });
+                }
             }
         });
     }

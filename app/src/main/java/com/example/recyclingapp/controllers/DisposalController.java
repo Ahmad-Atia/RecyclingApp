@@ -6,6 +6,7 @@ import android.location.Geocoder;
 import com.example.recyclingapp.models.Adresse;
 import com.example.recyclingapp.models.DisposalPoint;
 import com.example.recyclingapp.models.DisposalPointsManager;
+import com.example.recyclingapp.utils.NetworkUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import java.io.IOException;
 import java.util.Comparator;
@@ -51,6 +52,10 @@ public class DisposalController {
     }
 
     private void geocodeAndFetch(String addressStr, DisposalPointsManager.PointsCallback callback) {
+        if (!NetworkUtils.isOnline(context)) {
+            callback.onError("Internetverbindung erforderlich für die Suche nach Entsorgungsstellen.");
+            return;
+        }
         new Thread(() -> {
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
             try {

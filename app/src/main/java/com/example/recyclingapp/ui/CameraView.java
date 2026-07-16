@@ -25,6 +25,7 @@ import com.example.recyclingapp.R;
 import com.example.recyclingapp.databinding.FragmentCameraBinding;
 import com.example.recyclingapp.controllers.ScanController;
 import com.example.recyclingapp.models.ScanResult;
+import com.example.recyclingapp.utils.NetworkUtils;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.io.File;
 import java.util.concurrent.ExecutionException;
@@ -116,6 +117,11 @@ public class CameraView extends Fragment {
 
     public void onCaptureButtonPressed() {
         if (imageCapture == null || getContext() == null) return;
+
+        if (!NetworkUtils.isOnline(requireContext())) {
+            Toast.makeText(requireContext(), "Internetverbindung erforderlich für KI-Analyse", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         File imageFile = new File(requireContext().getCacheDir(), "capture.jpg");
         ImageCapture.OutputFileOptions outputOptions = new ImageCapture.OutputFileOptions.Builder(imageFile).build();

@@ -27,6 +27,7 @@ import com.example.recyclingapp.models.AppNotification;
 import com.example.recyclingapp.models.ScanResult;
 import com.example.recyclingapp.models.User;
 import com.example.recyclingapp.ui.adapters.ScanVerlaufAdapter;
+import com.example.recyclingapp.utils.NetworkUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.File;
@@ -151,6 +152,10 @@ public class DashboardView extends Fragment {
     }
 
     private void processGalleryImage(Uri uri) {
+        if (!NetworkUtils.isOnline(requireContext())) {
+            Toast.makeText(requireContext(), "Internetverbindung erforderlich für KI-Analyse", Toast.LENGTH_LONG).show();
+            return;
+        }
         try {
             File tempFile = new File(requireContext().getCacheDir(), "gallery_upload.jpg");
             InputStream inputStream = requireContext().getContentResolver().openInputStream(uri);

@@ -10,6 +10,7 @@ import com.example.recyclingapp.models.Item;
 import com.example.recyclingapp.models.ScanResult;
 import com.example.recyclingapp.models.ScanVerlaufEintrag;
 import com.example.recyclingapp.network.MistralApiService;
+import com.example.recyclingapp.utils.NetworkUtils;
 import com.example.recyclingapp.network.MistralClient;
 import com.example.recyclingapp.network.MistralMessage;
 import com.example.recyclingapp.network.MistralRequest;

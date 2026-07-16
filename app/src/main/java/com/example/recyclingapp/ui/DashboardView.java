@@ -100,7 +100,13 @@ public class DashboardView extends Fragment {
     }
 
     private void setupRecentScans() {
-        scanAdapter = new ScanVerlaufAdapter();
+        scanAdapter = new ScanVerlaufAdapter(eintrag -> {
+            if (getView() != null) {
+                Bundle bundle = new Bundle();
+                bundle.putString("scanId", eintrag.getId());
+                Navigation.findNavController(getView()).navigate(R.id.action_dashboardView_to_resultView, bundle);
+            }
+        });
         binding.rvRecentScans.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvRecentScans.setAdapter(scanAdapter);
     }

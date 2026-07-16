@@ -59,11 +59,7 @@
             android:gravity="center_vertical"
             app:layout_constraintTop_toBottomOf="@id/pointAddress">
 
-            <ImageView
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:src="@drawable/uhr_icon"
-                app:tint="#555" />
+
 
             <TextView
                 android:id="@+id/pointHours"
@@ -78,14 +74,17 @@
         <Button
             android:id="@+id/routeButton"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="14dp"
             android:backgroundTint="#1B5E20"
             android:text="Route"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            app:cornerRadius="12dp"
+            android:textSize="15sp"
+            app:cornerRadius="14dp"
             app:icon="@drawable/route"
+            app:iconSize="20dp"
+            app:iconGravity="textStart"
             app:layout_constraintTop_toBottomOf="@id/hoursLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

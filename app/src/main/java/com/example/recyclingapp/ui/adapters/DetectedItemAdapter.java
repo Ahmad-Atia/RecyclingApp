@@ -37,20 +37,32 @@ public class DetectedItemAdapter extends RecyclerView.Adapter<DetectedItemAdapte
         holder.binding.itemCategory.setText(item.getCategory());
         
         String category = item.getCategory().toLowerCase();
-        
-        if (category.contains("sonder")) {
-            holder.binding.categoryDot.setBackgroundResource(R.drawable.dot_red);
-            holder.binding.itemCategory.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_red_dark));
-            holder.binding.itemIcon.setColorFilter(ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_green_dark));
-        } else if (category.contains("pfand") || category.contains("wertstoff")) {
-            holder.binding.categoryDot.setBackgroundResource(R.drawable.dot_green);
-            holder.binding.itemCategory.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_green_dark));
-            holder.binding.itemIcon.setColorFilter(ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_green_dark));
+        int color;
+        int dotRes = R.drawable.dot_green;
+
+        if (category.contains("sonder") || category.contains("batterie") || category.contains("akku")) {
+            color = ContextCompat.getColor(holder.itemView.getContext(), R.color.cat_sondermuell);
+            dotRes = R.drawable.dot_red;
+        } else if (category.contains("gelb") || category.contains("plastik") || category.contains("wertstoff")) {
+            color = ContextCompat.getColor(holder.itemView.getContext(), R.color.cat_gelbe_tonne);
+        } else if (category.contains("papier")) {
+            color = ContextCompat.getColor(holder.itemView.getContext(), R.color.cat_papier);
+        } else if (category.contains("bio")) {
+            color = ContextCompat.getColor(holder.itemView.getContext(), R.color.cat_bio);
+        } else if (category.contains("glas")) {
+            color = ContextCompat.getColor(holder.itemView.getContext(), R.color.cat_glas);
+        } else if (category.contains("pfand")) {
+            color = ContextCompat.getColor(holder.itemView.getContext(), R.color.cat_pfand);
+        } else if (category.contains("rest")) {
+            color = ContextCompat.getColor(holder.itemView.getContext(), R.color.cat_restmuell);
+            dotRes = R.drawable.dot_red;
         } else {
-            holder.binding.categoryDot.setBackgroundResource(R.drawable.dot_green);
-            holder.binding.itemCategory.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_green_dark));
-            holder.binding.itemIcon.setColorFilter(ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_green_dark));
+            color = ContextCompat.getColor(holder.itemView.getContext(), R.color.primary);
         }
+
+        holder.binding.categoryDot.setBackgroundResource(dotRes);
+        holder.binding.itemCategory.setTextColor(color);
+        holder.binding.itemIcon.setColorFilter(color);
 
         holder.itemView.setOnClickListener(v -> listener.onItemClick(item));
     }

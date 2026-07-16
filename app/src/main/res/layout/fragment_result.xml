@@ -64,6 +64,7 @@
         android:textColor="#FFFFFF"
         app:cornerRadius="12dp"
         android:drawableStart="@drawable/ic_refresh"
+        android:drawablePadding="8dp"
         android:paddingStart="24dp" />
 
 </LinearLayout>

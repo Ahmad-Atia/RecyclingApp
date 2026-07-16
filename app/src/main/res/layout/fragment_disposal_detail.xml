@@ -6,24 +6,28 @@
     android:layout_height="match_parent"
     android:background="#F4FBF7">
 
+    <!-- Back Button -->
     <ImageButton
         android:id="@+id/backButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="12dp"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/back_arrow_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="#1B5E20" />
 
+    <!-- Title (centered) -->
     <TextView
         android:id="@+id/mainTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Sondermüll"
-        android:textColor="#D32F2F"
+        android:textColor="#C2185B"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,86 +47,96 @@
             android:orientation="vertical"
             android:padding="24dp">
 
+            <!-- Colored circle -->
             <View
                 android:id="@+id/statusCircle"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:background="@drawable/bg_circle_blue"
-                android:backgroundTint="#D32F2F" />
+                android:backgroundTint="#C2185B" />
 
+            <!-- Icon on top of circle -->
             <ImageView
                 android:id="@+id/mainIcon"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginTop="-92dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginTop="-76dp"
                 android:src="@drawable/container"
                 app:tint="#FFFFFF" />
 
+            <!-- Item Name -->
             <TextView
                 android:id="@+id/itemName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="40dp"
                 android:text="Akku"
                 android:textColor="#000000"
-                android:textSize="28sp"
+                android:textSize="26sp"
                 android:textStyle="bold" />
 
+            <!-- Category Tag -->
             <TextView
                 android:id="@+id/itemCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="SONDERMÜLL"
-                android:textColor="#D32F2F"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textColor="#C2185B"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
 
+            <!-- Warning Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                app:cardCornerRadius="16dp"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:strokeColor="#E0E0E0"
+                app:cardBackgroundColor="#FFF8F0"
+                app:strokeColor="#FFCC80"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="14dp"
+                    android:gravity="top">
 
                     <ImageView
                         android:id="@+id/instructionIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="2dp"
                         android:src="@drawable/dot_red" />
 
                     <TextView
                         android:id="@+id/instructionText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="Akkus gehören nicht in den Hausmüll. Bitte an einer Rückgabestelle abgeben."
+                        android:layout_marginStart="10dp"
+                        android:text="Akkus gehören nicht in den Hausmüll. Bitte an einer Rückgabestelle abgeben, um Umweltgefahren zu vermeiden."
                         android:textColor="#555"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Section: Nächste Rückgabestellen -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="28dp"
                 android:text="Nächste Rückgabestellen"
                 android:textColor="#000000"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <!-- Map Placeholder -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="14dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp">
 
@@ -130,26 +144,28 @@
                     android:id="@+id/mapPlaceholderImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#F0F0F0"
+                    android:background="#D8ECD0"
                     android:scaleType="centerCrop"
                     android:src="@drawable/disposal_background" />
             </androidx.cardview.widget.CardView>
 
+            <!-- Disposal Points List -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/disposalPointsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 tools:listitem="@layout/item_disposal_point" />
 
+            <!-- Falsch erkannt link -->
             <TextView
                 android:id="@+id/wronglyIdentifiedText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp"
                 android:text="Falsch erkannt?"
-                android:textColor="#888"
+                android:textColor="#9E9E9E"
                 android:textSize="14sp"
                 android:textStyle="normal"
                 android:background="?attr/selectableItemBackground"

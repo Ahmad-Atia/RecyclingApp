@@ -36,9 +36,8 @@
                 android:background="?attr/selectableItemBackgroundBorderless">
 
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:padding="2dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:src="@drawable/ic_notifications"
                     app:tint="#1B5E20" />
 
@@ -107,8 +106,8 @@
                     android:focusable="true">
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:src="@drawable/baseline_photo_camera_24"
                         app:tint="#FFFFFF" />
 
@@ -150,8 +149,8 @@
 
                 <ImageView
                     android:id="@+id/trashIcon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:src="@drawable/ic_trash"
                     android:layout_centerVertical="true" />
 

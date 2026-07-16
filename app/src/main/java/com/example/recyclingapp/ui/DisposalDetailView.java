@@ -54,23 +54,33 @@ public class DisposalDetailView extends Fragment {
             colorRes = R.color.cat_sondermuell;
             iconRes = R.drawable.muell_icon_red;
             binding.instructionIcon.setImageResource(R.drawable.dot_red);
-        } else if (catLower.contains("gelb") || catLower.contains("plastik")) {
+        } else if (catLower.contains("gelb") || catLower.contains("plastik") || catLower.contains("verpackung")) {
             colorRes = R.color.cat_gelbe_tonne;
+            iconRes = R.drawable.ic_trash;
             binding.instructionIcon.setImageResource(R.drawable.dot_green);
         } else if (catLower.contains("papier")) {
             colorRes = R.color.cat_papier;
+            iconRes = R.drawable.ic_trash;
             binding.instructionIcon.setImageResource(R.drawable.dot_green);
         } else if (catLower.contains("glas")) {
             colorRes = R.color.cat_glas;
+            iconRes = R.drawable.ic_trash;
             binding.instructionIcon.setImageResource(R.drawable.dot_green);
         } else if (catLower.contains("bio")) {
             colorRes = R.color.cat_bio;
+            iconRes = R.drawable.ic_trash;
             binding.instructionIcon.setImageResource(R.drawable.dot_green);
-        } else if (catLower.contains("pfand")) {
+        } else if (catLower.contains("pfand") || catLower.contains("flasche")) {
             colorRes = R.color.cat_pfand;
+            iconRes = R.drawable.container;
             binding.instructionIcon.setImageResource(R.drawable.dot_green);
         } else if (catLower.contains("rest")) {
             colorRes = R.color.cat_restmuell;
+            iconRes = R.drawable.ic_trash;
+            binding.instructionIcon.setImageResource(R.drawable.dot_red);
+        } else if (catLower.contains("akku") || catLower.contains("batterie")) {
+            colorRes = R.color.cat_sondermuell;
+            iconRes = R.drawable.ic_battery;
             binding.instructionIcon.setImageResource(R.drawable.dot_red);
         }
 
@@ -79,10 +89,11 @@ public class DisposalDetailView extends Fragment {
         binding.itemCategory.setTextColor(color);
         binding.statusCircle.setBackgroundTintList(android.content.res.ColorStateList.valueOf(color));
         binding.mainIcon.setImageResource(iconRes);
+        binding.mainIcon.setImageTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.WHITE));
         binding.backButton.setImageTintList(android.content.res.ColorStateList.valueOf(color));
         
         String instruction;
-        if (catLower.contains("sonder")) {
+        if (catLower.contains("sonder") || catLower.contains("akku") || catLower.contains("batterie")) {
             instruction = name + " gehören nicht in den Hausmüll. Bitte an einer Rückgabestelle abgeben, um Umweltgefahren zu vermeiden.";
         } else if (catLower.contains("gelb")) {
             instruction = name + " gehört in die Gelbe Tonne oder den Gelben Sack.";

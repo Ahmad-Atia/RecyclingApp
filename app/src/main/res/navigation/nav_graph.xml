@@ -155,7 +155,11 @@
         android:id="@+id/scanVerlaufView"
         android:name="com.example.recyclingapp.ui.ScanVerlaufView"
         android:label="Scan-Verlauf"
-        tools:layout="@layout/fragment_scan_verlauf" />
+        tools:layout="@layout/fragment_scan_verlauf">
+        <action
+            android:id="@+id/action_scanVerlaufView_to_resultView"
+            app:destination="@id/resultView" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_disposal"

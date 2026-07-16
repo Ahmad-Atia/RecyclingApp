@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.recyclingapp.R;
 import com.example.recyclingapp.ui.adapters.ScanVerlaufAdapter;
 import com.example.recyclingapp.controllers.ScanController;
 import com.example.recyclingapp.databinding.FragmentScanVerlaufBinding;
@@ -37,7 +38,12 @@ public class ScanVerlaufView extends Fragment {
 
         binding.ivBack.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
 
-        adapter = new ScanVerlaufAdapter();
+        adapter = new ScanVerlaufAdapter(eintrag -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("scanId", eintrag.getId());
+            Navigation.findNavController(requireView()).navigate(R.id.action_scanVerlaufView_to_resultView, bundle);
+        });
+        
         binding.rvScanVerlauf.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvScanVerlauf.setAdapter(adapter);
 
@@ -63,6 +69,8 @@ public class ScanVerlaufView extends Fragment {
         String uid = FirebaseAuth.getInstance().getCurrentUser() != null
                 ? FirebaseAuth.getInstance().getCurrentUser().getUid()
                 : null;
+
+        if (uid == null) return;
 
         scanController.fetchScanVerlauf(uid, eintraege -> {
             if (binding == null) return;

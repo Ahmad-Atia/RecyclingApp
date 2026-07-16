@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
+    android:layout_marginBottom="10dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="1dp"
+    app:cardElevation="0dp"
     app:cardBackgroundColor="@android:color/white">
 
     <LinearLayout
@@ -38,28 +38,38 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <!-- Title row with time + unread dot -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/tvTitle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Titel"
-                    android:textColor="#333333"
+                    android:textColor="#1A1A1A"
                     android:textStyle="bold"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tvTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:text="Vor 10 Min"
-                    android:textColor="#888888"
-                    android:textSize="11sp" />
-            </RelativeLayout>
+                    android:textColor="#9E9E9E"
+                    android:textSize="11sp"
+                    android:layout_marginEnd="6dp" />
+
+                <View
+                    android:id="@+id/unreadDot"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:background="@drawable/dot_green" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvMessage"
@@ -67,16 +77,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="Nachrichtentext..."
-                android:textColor="#666666"
+                android:textColor="#6B7280"
                 android:textSize="13sp" />
         </LinearLayout>
-
-        <View
-            android:id="@+id/unreadDot"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/dot_green" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

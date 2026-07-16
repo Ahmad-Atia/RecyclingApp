@@ -15,6 +15,15 @@ import java.util.List;
 public class ScanVerlaufAdapter extends RecyclerView.Adapter<ScanVerlaufAdapter.ViewHolder> {
 
     private final List<ScanVerlaufEintrag> list = new ArrayList<>();
+    private final OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(ScanVerlaufEintrag eintrag);
+    }
+
+    public ScanVerlaufAdapter(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public void submitList(List<ScanVerlaufEintrag> newList) {
         this.list.clear();
@@ -32,7 +41,9 @@ public class ScanVerlaufAdapter extends RecyclerView.Adapter<ScanVerlaufAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(list.get(position));
+        ScanVerlaufEintrag eintrag = list.get(position);
+        holder.bind(eintrag);
+        holder.itemView.setOnClickListener(v -> listener.onItemClick(eintrag));
     }
 
     @Override

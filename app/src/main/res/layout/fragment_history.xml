@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7FAF7"
+    android:background="#F4F7EE"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -11,15 +11,26 @@
         android:layout_height="wrap_content"
         android:padding="20dp">
 
+        <!-- Header with title and bell icon -->
         <TextView
             android:id="@+id/tv_header_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="RecycleSnap"
             android:textColor="#1B5E20"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_bell"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/ic_notifications"
+            app:tint="#1B5E20"
+            android:contentDescription="Benachrichtigungen"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
@@ -29,7 +40,7 @@
             android:layout_marginTop="18dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
-            app:cardBackgroundColor="#EAF3E3"
+            app:cardBackgroundColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@id/tv_header_title">
 
             <LinearLayout
@@ -37,16 +48,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:padding="14dp">
-
-                <TextView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="12dp"
-                    android:background="@android:color/white"
-                    android:gravity="center"
-                    android:text="📍"
-                    android:textSize="18sp" />
+                android:padding="16dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -58,7 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Abholort"
-                        android:textColor="#5B8A5E"
+                        android:textColor="#9E9E9E"
                         android:textSize="12sp" />
 
                     <TextView
@@ -66,19 +68,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Lädt..."
-                        android:textColor="#1B5E20"
+                        android:text="Hauptstraße 42, 10115 Berlin"
+                        android:textColor="#1A1A1A"
                         android:textStyle="bold"
                         android:textSize="15sp" />
                 </LinearLayout>
 
                 <ImageButton
                     android:id="@+id/btn_edit_abholort"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:src="@android:drawable/ic_menu_edit"
-                    app:tint="#1B5E20"
+                    app:tint="#2E7D32"
                     android:contentDescription="Abholort bearbeiten" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -166,9 +168,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
             android:text="Kommende Abholungen"
-            android:textColor="#1B5E20"
+            android:textColor="#1A1A1A"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/card_kalender" />
 

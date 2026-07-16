@@ -12,7 +12,7 @@
         android:layout_height="48dp"
         android:layout_margin="8dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_back"
+        android:src="@drawable/back_arrow_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="#1B5E20" />
@@ -55,7 +55,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_marginTop="-92dp"
-                android:src="@drawable/ic_trash"
+                android:src="@drawable/container"
                 app:tint="#FFFFFF" />
 
             <TextView

@@ -1,9 +1,12 @@
 package com.example.recyclingapp.ui.adapters;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.recyclingapp.R;
 import com.example.recyclingapp.databinding.ItemScanVerlaufBinding;
 import com.example.recyclingapp.models.ScanVerlaufEintrag;
 import java.util.ArrayList;
@@ -51,17 +54,39 @@ public class ScanVerlaufAdapter extends RecyclerView.Adapter<ScanVerlaufAdapter.
             binding.tvItemKategorie.setText(eintrag.getKategorie().toUpperCase());
             
             String kat = eintrag.getKategorie().toLowerCase();
+            int iconColor;
+            int pillDrawable;
+            int textColor;
+
             if (kat.contains("gelb")) {
-                binding.tvItemIcon.setText("🟡");
+                iconColor = Color.parseColor("#FFD700"); // Gelber Sack
+                pillDrawable = R.drawable.bg_pill_yellow;
+                textColor = Color.parseColor("#856404");
             } else if (kat.contains("papier")) {
-                binding.tvItemIcon.setText("🔵");
+                iconColor = Color.parseColor("#007BFF"); // Papiertonne
+                pillDrawable = R.drawable.bg_pill_blue;
+                textColor = Color.parseColor("#004085");
             } else if (kat.contains("bio")) {
-                binding.tvItemIcon.setText("🟢");
-            } else if (kat.contains("restmüll")) {
-                binding.tvItemIcon.setText("⚫");
+                iconColor = Color.parseColor("#28A745"); // Biotonne
+                pillDrawable = R.drawable.bg_pill_green;
+                textColor = Color.parseColor("#155724");
+            } else if (kat.contains("restmüll") || kat.contains("rest")) {
+                iconColor = Color.parseColor("#6C757D"); // Restmüll
+                pillDrawable = R.drawable.bg_pill_red;
+                textColor = Color.parseColor("#721c24");
             } else {
-                binding.tvItemIcon.setText("📦");
+                iconColor = ContextCompat.getColor(itemView.getContext(), R.color.neutral);
+                pillDrawable = R.drawable.bg_pill_blue;
+                textColor = Color.DKGRAY;
             }
+
+            binding.ivItemIcon.setImageResource(R.drawable.ic_trash);
+            binding.ivItemIcon.setColorFilter(iconColor);
+            binding.tvItemKategorie.setBackgroundResource(pillDrawable);
+            binding.tvItemKategorie.setTextColor(textColor);
+            
+            // Fixed light gray background for icon container
+            binding.iconContainer.setCardBackgroundColor(Color.parseColor("#F1F3F5"));
         }
     }
 }

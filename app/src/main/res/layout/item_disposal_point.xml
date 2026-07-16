@@ -50,15 +50,30 @@
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@id/pointName" />
 
-        <TextView
-            android:id="@+id/pointHours"
+        <LinearLayout
+            android:id="@+id/hoursLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="🕒 Heute bis 18:00 geöffnet"
-            android:textColor="#555"
-            android:textSize="14sp"
-            app:layout_constraintTop_toBottomOf="@id/pointAddress" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toBottomOf="@id/pointAddress">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/uhr_icon"
+                app:tint="#555" />
+
+            <TextView
+                android:id="@+id/pointHours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="Heute bis 18:00 geöffnet"
+                android:textColor="#555"
+                android:textSize="14sp" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/routeButton"
@@ -70,8 +85,8 @@
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             app:cornerRadius="12dp"
-            app:icon="@drawable/ic_refresh"
-            app:layout_constraintTop_toBottomOf="@id/pointHours" />
+            app:icon="@drawable/route"
+            app:layout_constraintTop_toBottomOf="@id/hoursLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

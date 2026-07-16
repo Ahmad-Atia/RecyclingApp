@@ -27,7 +27,7 @@
             android:id="@+id/itemIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_waste_placeholder"
+            android:src="@drawable/container"
             app:layout_constraintBottom_toBottomOf="@id/iconBackground"
             app:layout_constraintEnd_toEndOf="@id/iconBackground"
             app:layout_constraintStart_toStartOf="@id/iconBackground"

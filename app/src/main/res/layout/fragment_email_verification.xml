@@ -19,7 +19,7 @@
             android:layout_height="32dp"
             android:layout_alignParentStart="true"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/back_arrow_icon"
             app:tint="#0B6623" />
 
         <LinearLayout

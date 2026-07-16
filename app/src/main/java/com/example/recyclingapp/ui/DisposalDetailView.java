@@ -48,11 +48,11 @@ public class DisposalDetailView extends Fragment {
 
         String catLower = category.toLowerCase();
         int colorRes = R.color.black;
-        int iconRes = R.drawable.ic_trash;
+        int iconRes = R.drawable.container;
 
         if (catLower.contains("sonder")) {
             colorRes = R.color.cat_sondermuell;
-            iconRes = R.drawable.ic_battery;
+            iconRes = R.drawable.muell_icon_red;
             binding.instructionIcon.setImageResource(R.drawable.dot_red);
         } else if (catLower.contains("gelb") || catLower.contains("plastik")) {
             colorRes = R.color.cat_gelbe_tonne;

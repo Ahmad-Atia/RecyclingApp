@@ -12,7 +12,7 @@
         android:id="@+id/iv_back"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:src="@android:drawable/ic_menu_revert"
+        android:src="@drawable/back_arrow_icon"
         android:background="?attr/selectableItemBackgroundBorderless"
         app:tint="#1B5E20"
         android:contentDescription="Zurück"

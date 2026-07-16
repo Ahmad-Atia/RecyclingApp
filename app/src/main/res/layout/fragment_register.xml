@@ -24,7 +24,7 @@
                 android:id="@+id/btn_back_to_login"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_back"
+                android:src="@drawable/back_arrow_icon"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Zurück" />
 

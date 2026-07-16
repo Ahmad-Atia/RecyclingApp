@@ -67,7 +67,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:padding="6dp"
-                        android:src="@android:drawable/ic_menu_edit"
+                        android:src="@drawable/edit_icon"
                         app:tint="@android:color/white" />
                 </androidx.cardview.widget.CardView>
 
@@ -125,7 +125,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_mapmode"
+                        android:src="@drawable/hauptadresse_icon"
                         app:tint="#555555" />
                     <TextView
                         android:layout_width="0dp"
@@ -157,7 +157,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_crop"
+                        android:src="@drawable/scan_verlauf"
                         app:tint="#555555" />
                     <TextView
                         android:layout_width="0dp"
@@ -189,7 +189,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@android:drawable/ic_popup_reminder"
+                        android:src="@drawable/notification_icon"
                         app:tint="#555555" />
                     <TextView
                         android:layout_width="0dp"
@@ -220,7 +220,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_search"
+                        android:src="@drawable/sprache_icon"
                         app:tint="#555555" />
                     <TextView
                         android:layout_width="0dp"
@@ -268,7 +268,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@android:drawable/btn_star_big_on"
+                        android:src="@drawable/erfolg_icon"
                         android:layout_marginBottom="8dp"
                         app:tint="#1B5E20"/>
                     <TextView
@@ -305,7 +305,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_compass"
+                        android:src="@drawable/co2_icon"
                         android:layout_marginBottom="8dp"
                         app:tint="#D32F2F"/>
                     <TextView

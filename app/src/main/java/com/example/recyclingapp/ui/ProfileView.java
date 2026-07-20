@@ -87,7 +87,10 @@ public class ProfileView extends Fragment {
 
     private void navigateToLogin(View view) {
         try {
-            Navigation.findNavController(view).navigate(R.id.loginView);
+            androidx.navigation.NavOptions navOptions = new androidx.navigation.NavOptions.Builder()
+                    .setPopUpTo(R.id.nav_graph, true)
+                    .build();
+            Navigation.findNavController(view).navigate(R.id.loginView, null, navOptions);
         } catch (Exception e) {
             if (getActivity() != null) {
                 Toast.makeText(getActivity(), "Navigationsfehler", Toast.LENGTH_SHORT).show();

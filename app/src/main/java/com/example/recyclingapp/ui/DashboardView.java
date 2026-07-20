@@ -20,12 +20,17 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.recyclingapp.R;
 import com.example.recyclingapp.databinding.FragmentDashboardBinding;
+import com.example.recyclingapp.controllers.AdressenController;
 import com.example.recyclingapp.controllers.NotificationController;
 import com.example.recyclingapp.controllers.ProfileController;
 import com.example.recyclingapp.controllers.ScanController;
+import com.example.recyclingapp.models.Abfuhrregel;
+import com.example.recyclingapp.models.AbholTermin;
+import com.example.recyclingapp.models.Adresse;
 import com.example.recyclingapp.models.AppNotification;
 import com.example.recyclingapp.models.ScanResult;
 import com.example.recyclingapp.models.User;
+import com.example.recyclingapp.ui.adapters.AbholTerminAdapter;
 import com.example.recyclingapp.ui.adapters.ScanVerlaufAdapter;
 import com.example.recyclingapp.utils.NetworkUtils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,7 +38,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class DashboardView extends Fragment {
@@ -41,6 +51,7 @@ public class DashboardView extends Fragment {
     private ProfileController profileController;
     private ScanController scanController;
     private NotificationController notificationController;
+    private AdressenController adressenController;
     private ScanVerlaufAdapter scanAdapter;
 
     private final ActivityResultLauncher<String> requestCameraPermissionLauncher =
@@ -66,10 +77,11 @@ public class DashboardView extends Fragment {
         profileController = new ProfileController();
         scanController = new ScanController();
         notificationController = new NotificationController();
+        adressenController = new AdressenController();
 
         setupRecentScans();
 
-        binding.viewCalendarButton.setOnClickListener(v -> onViewCalendarPressed());
+
         binding.startScanButton.setOnClickListener(v -> showScanOptionsDialog());
         binding.btnAlleAnsehen.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_dashboardView_to_scanVerlaufView));
         binding.btnNotifications.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_dashboardView_to_benachrichtigungenView));
@@ -77,8 +89,82 @@ public class DashboardView extends Fragment {
         loadUserData();
         loadRecentScans();
         checkUnreadNotifications();
+        ladeNaechsteAbholung();
 
         return binding.getRoot();
+    }
+
+    private void ladeNaechsteAbholung() {
+        String uid = FirebaseAuth.getInstance().getUid();
+        if (uid == null) return;
+
+        adressenController.fetchAdressen(uid, adressen -> {
+            if (!isAdded() || binding == null) return;
+            
+            Adresse standard = null;
+            for (Adresse a : adressen) {
+                if (a.isIstStandard()) {
+                    standard = a;
+                    break;
+                }
+            }
+            if (standard == null && !adressen.isEmpty()) {
+                standard = adressen.get(0);
+            }
+
+            if (standard != null && !standard.getAbfuhrregeln().isEmpty()) {
+                updateAbfuhrBanner(standard.getAbfuhrregeln());
+            } else {
+                binding.nextPickupNameDate.setText("Keine Termine");
+                binding.nextPickupCountdownContainer.setVisibility(View.GONE);
+            }
+        }, e -> Log.e("DashboardView", "Fehler beim Laden der Adressen", e));
+    }
+
+    private void updateAbfuhrBanner(List<Abfuhrregel> regeln) {
+        Calendar heute = Calendar.getInstance();
+        List<AbholTermin> termine = new ArrayList<>();
+        
+        for (Abfuhrregel regel : regeln) {
+            termine.add(new AbholTermin(regel.getTonnenTyp(), regel.naechsterTerminAb(heute)));
+        }
+        
+        Collections.sort(termine, (a, b) -> a.getDatum().compareTo(b.getDatum()));
+
+        if (!termine.isEmpty()) {
+            AbholTermin naechster = termine.get(0);
+            SimpleDateFormat fmt = new SimpleDateFormat("EEEE, d. MMM", Locale.GERMANY);
+            
+            String text = naechster.getTonnenTyp() + " –\n" + fmt.format(naechster.getDatum().getTime());
+            binding.nextPickupNameDate.setText(text);
+            
+            long tage = tageZwischen(heute, naechster.getDatum());
+            String countdown;
+            if (tage == 0) {
+                countdown = "Heute";
+            } else if (tage == 1) {
+                countdown = "Morgen";
+            } else {
+                countdown = "in " + tage + " Tagen";
+            }
+            
+            binding.nextPickupCountdown.setText(countdown);
+            binding.nextPickupCountdownContainer.setVisibility(View.VISIBLE);
+            
+            // Optional: Banner Farbe an Tonnen-Typ anpassen
+            int farbe = AbholTerminAdapter.punktFarbeFuer(naechster.getTonnenTyp());
+            // Wir machen sie etwas dunkler für bessere Lesbarkeit von weißem Text, 
+            // oder nutzen sie direkt wenn sie kräftig genug ist.
+            binding.viewCalendarButton.setCardBackgroundColor(farbe);
+        }
+    }
+
+    private long tageZwischen(Calendar von, Calendar bis) {
+        Calendar a = (Calendar) von.clone();
+        a.set(Calendar.HOUR_OF_DAY, 0); a.set(Calendar.MINUTE, 0); a.set(Calendar.SECOND, 0); a.set(Calendar.MILLISECOND, 0);
+        Calendar b = (Calendar) bis.clone();
+        b.set(Calendar.HOUR_OF_DAY, 0); b.set(Calendar.MINUTE, 0); b.set(Calendar.SECOND, 0); b.set(Calendar.MILLISECOND, 0);
+        return Math.round((b.getTimeInMillis() - a.getTimeInMillis()) / 86400000.0);
     }
 
     private void checkUnreadNotifications() {
@@ -240,7 +326,14 @@ public class DashboardView extends Fragment {
     }
 
     public void onViewCalendarPressed() {
-        profileController.fetchWasteCalendar();
+        if (getView() != null) {
+            // Use NavOptions to mimic bottom navigation behavior (top-level navigation)
+            androidx.navigation.NavOptions navOptions = new androidx.navigation.NavOptions.Builder()
+                    .setLaunchSingleTop(true)
+                    .setPopUpTo(R.id.dashboardView, false)
+                    .build();
+            Navigation.findNavController(getView()).navigate(R.id.calendarFragment, null, navOptions);
+        }
     }
 
     @Override

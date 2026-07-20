@@ -170,27 +170,31 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/nextPickupNameDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Gelbe Tonne –\nMittwoch, 15.04."
+                        android:text="Keine Termine"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/nextPickupCountdownContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     app:cardCornerRadius="20dp"
                     app:cardBackgroundColor="#A5D6A7"
-                    app:cardElevation="0dp">
+                    app:cardElevation="0dp"
+                    android:visibility="gone">
 
                     <TextView
+                        android:id="@+id/nextPickupCountdown"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="in 2 Tagen"
+                        android:text="-"
                         android:paddingHorizontal="12dp"
                         android:paddingVertical="8dp"
                         android:textColor="#1B5E20"

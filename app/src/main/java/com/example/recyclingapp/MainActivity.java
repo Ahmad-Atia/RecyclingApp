@@ -15,6 +15,7 @@ import androidx.navigation.NavGraph;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -42,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (navHostFragment != null) {
             NavController navController = navHostFragment.getNavController();
-            BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
 
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             SharedPreferences prefs = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
@@ -66,30 +66,41 @@ public class MainActivity extends AppCompatActivity {
 
             navController.setGraph(navGraph);
 
-            if (bottomNav != null) {
-                NavigationUI.setupWithNavController(bottomNav, navController);
+            NavigationBarView navView = findViewById(R.id.bottom_navigation);
 
+            if (navView != null) {
+                NavigationUI.setupWithNavController(navView, navController);
+
+                final NavigationBarView finalNavView = navView;
                 navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-                    if (destination.getId() == R.id.loginView ||
-                            destination.getId() == R.id.registerView ||
-                            destination.getId() == R.id.onboardingView) {
-                        bottomNav.setVisibility(View.GONE);
+                    int id = destination.getId();
+                    
+                    // Update start destination dynamically to keep the "Home" button working correctly
+                    if (id == R.id.dashboardView) {
+                        NavGraph graph = controller.getGraph();
+                        if (graph.getStartDestinationId() != R.id.dashboardView) {
+                            graph.setStartDestination(R.id.dashboardView);
+                        }
+                    }
+
+                    if (id == R.id.loginView || id == R.id.registerView || id == R.id.onboardingView) {
+                        finalNavView.setVisibility(View.GONE);
                     } else {
-                        bottomNav.setVisibility(View.VISIBLE);
+                        finalNavView.setVisibility(View.VISIBLE);
                     }
                 });
 
-                // Reserviert automatisch genug Platz am unteren Rand jeder Seite, damit die
-                // schwebende Bottom-Nav niemals Inhalte verdeckt - ganz ohne manuelles Padding
-                // in den einzelnen Fragment-Layouts.
-                navHostFragment.getChildFragmentManager().registerFragmentLifecycleCallbacks(
-                        new FragmentManager.FragmentLifecycleCallbacks() {
-                            @Override
-                            public void onFragmentViewCreated(@NonNull FragmentManager fm, @NonNull Fragment f,
-                                                               @NonNull View v, @Nullable Bundle savedInstanceState) {
-                                v.post(() -> reserviereBottomNavPlatz(v, bottomNav));
-                            }
-                        }, false);
+                if (navView instanceof BottomNavigationView) {
+                    final BottomNavigationView bNav = (BottomNavigationView) navView;
+                    navHostFragment.getChildFragmentManager().registerFragmentLifecycleCallbacks(
+                            new FragmentManager.FragmentLifecycleCallbacks() {
+                                @Override
+                                public void onFragmentViewCreated(@NonNull FragmentManager fm, @NonNull Fragment f,
+                                                                   @NonNull View v, @Nullable Bundle savedInstanceState) {
+                                    v.post(() -> reserviereBottomNavPlatz(v, bNav));
+                                }
+                            }, false);
+                }
             }
         }
     }
